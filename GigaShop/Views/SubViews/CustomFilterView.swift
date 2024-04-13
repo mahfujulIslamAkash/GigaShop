@@ -69,9 +69,9 @@ class CustomFilterView: UIView{
     
     var motherSize: CGSize = .zero
     
-    var priceUp = true
-    var reviewUp = true
-    var reviewCountUp = true
+    private var priceUp = true
+    private var reviewUp = true
+    private var reviewCountUp = true
     
     init(motherSize: CGSize){
         super.init(frame: .zero)

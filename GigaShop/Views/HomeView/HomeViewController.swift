@@ -18,8 +18,9 @@ class HomeViewController: UIViewController {
     
     lazy var customFilterView: CustomFilterView = {
         let field = CustomFilterView(motherSize: CGSize(width: view.frame.width, height: 65))
-//        field.textFieldView.delegate = self
-//        field.seachButton.addTarget(self, action: #selector(searchTapped), for: .touchDown)
+        field.priceFilter.addTarget(self, action: #selector(priceTapped), for: .touchDown)
+        field.reviewFilter.addTarget(self, action: #selector(reviewTapped), for: .touchDown)
+        field.reviewCountFilter.addTarget(self, action: #selector(reviewCountTapped), for: .touchDown)
         return field
     }()
     
@@ -126,6 +127,17 @@ class HomeViewController: UIViewController {
     //MARK: Search Tap Action
     @objc func searchTapped(){
         let _ = homeViewModel.SearchAction(customSearchField.textFieldView)
+    }
+    
+    //MARK: Filter Action
+    @objc func priceTapped(){
+        homeViewModel.priceFilter()
+    }
+    @objc func reviewTapped(){
+        homeViewModel.reviewFilter()
+    }
+    @objc func reviewCountTapped(){
+        homeViewModel.reviewCountFilter()
     }
 }
 

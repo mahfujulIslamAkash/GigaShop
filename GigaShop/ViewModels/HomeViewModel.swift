@@ -9,7 +9,6 @@ import UIKit
 
 class HomeViewModel{
     
-    static var shared = NetworkService()
     init(_ searchText: String?){
         callApi(searchText)
     }
@@ -17,6 +16,13 @@ class HomeViewModel{
     var isLoading: ObservableObject<Bool> = ObservableObject(true)
     var error: ObservableObject<Bool?> = ObservableObject(nil)
     
+    static var shared = NetworkService()
+    
+    private var priceUp = true
+    private var reviewUp = true
+    private var reviewCountUp = true
+    
+    //MARK: Support for collection View
     func countOfGifsResult() -> Int{
         guard let gifs = HomeViewModel.shared.getGifResults() else{
             return 0
@@ -28,18 +34,50 @@ class HomeViewModel{
     func havingGifsResult() -> Bool{
         return false
     }
+    
     func sizeOfCell(_ parentWidget: CGFloat) -> CGSize{
         let width = (parentWidget-40)/3
         return CGSize(width: width, height: width)
     }
     
-    func SearchAction(_ textField: UITextField) -> Bool{
-        
-        callApi(textField.text)
-        return textField.resignFirstResponder()
+    func getCell(_ collectionView: UICollectionView, _ indexPath: IndexPath)->UICollectionViewCell{
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ItemCollectionViewCell
+        cell.gifViewModel = viewModelOfGif(indexPath)
+        cell.setupBinders()
+        return cell
     }
     
-    func callApi(_ searchedText: String?){
+    //MARK: Actions
+    func SearchAction(_ textField: UITextField?) -> Bool{
+        if let textField = textField{
+            callApi(textField.text)
+            return textField.resignFirstResponder()
+        }else{
+            callApi(nil)
+            return true
+        }
+        
+    }
+    
+    //MARK: Filters
+    func priceFilter(){
+        priceUp.toggle()
+        //adding data toggle functionality here
+        isLoaded.value = true
+    }
+    func reviewFilter(){
+        reviewUp.toggle()
+        //adding data toggle functionality here
+        isLoaded.value = true
+    }
+    func reviewCountFilter(){
+        reviewCountUp.toggle()
+        //adding data toggle functionality here
+        isLoaded.value = true
+    }
+    
+    
+    private func callApi(_ searchedText: String?){
         checkInternet(completion: {[weak self] success in
             if success{
                 self?.fetchingData(searchedText)
@@ -86,13 +124,13 @@ class HomeViewModel{
         return path
     }
     
-    func viewModelOfGif(_ indexPath: IndexPath) -> ItemViewModel{
+    private func viewModelOfGif(_ indexPath: IndexPath) -> ItemViewModel{
         let path = getPreviewGifPath(indexPath)
         return ItemViewModel(path: path)
     }
     
     //MARK: testing purpose for mine
-    func copyToClipboard(_ indexPath: IndexPath) {
+    private func copyToClipboard(_ indexPath: IndexPath) {
         let path = getOriginalGifPath(indexPath)
         UIView.shared.copyToClipboard(path)
     }
@@ -103,10 +141,5 @@ class HomeViewModel{
         }
         
     }
-    func getCell(_ collectionView: UICollectionView, _ indexPath: IndexPath)->UICollectionViewCell{
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ItemCollectionViewCell
-        cell.gifViewModel = viewModelOfGif(indexPath)
-        cell.setupBinders()
-        return cell
-    }
+    
 }
