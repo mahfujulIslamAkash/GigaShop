@@ -99,6 +99,11 @@
 		354D5A3F2BCA59D50067BDF7 /* GigaShop */ = {
 			isa = PBXGroup;
 			children = (
+				354D5A722BCA5C450067BDF7 /* Models */,
+				354D5A712BCA5C3E0067BDF7 /* Views */,
+				354D5A702BCA5C340067BDF7 /* ViewModels */,
+				354D5A732BCA5C5C0067BDF7 /* Services */,
+				354D5A742BCA5C660067BDF7 /* Supports */,
 				354D5A402BCA59D50067BDF7 /* AppDelegate.swift */,
 				354D5A422BCA59D50067BDF7 /* SceneDelegate.swift */,
 				354D5A442BCA59D50067BDF7 /* ViewController.swift */,
@@ -125,6 +130,41 @@
 				354D5A632BCA59D60067BDF7 /* GigaShopUITestsLaunchTests.swift */,
 			);
 			path = GigaShopUITests;
+			sourceTree = "<group>";
+		};
+		354D5A702BCA5C340067BDF7 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		354D5A712BCA5C3E0067BDF7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		354D5A722BCA5C450067BDF7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		354D5A732BCA5C5C0067BDF7 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		354D5A742BCA5C660067BDF7 /* Supports */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Supports;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
