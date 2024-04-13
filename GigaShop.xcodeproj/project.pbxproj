@@ -28,6 +28,8 @@
 		354D5A8D2BCA5E950067BDF7 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A8C2BCA5E950067BDF7 /* NetworkService.swift */; };
 		354D5A8F2BCA5F310067BDF7 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A8E2BCA5F310067BDF7 /* Item.swift */; };
 		354D5A912BCA60C10067BDF7 /* CustomFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A902BCA60C10067BDF7 /* CustomFilterView.swift */; };
+		354D5A942BCA896D0067BDF7 /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A932BCA896D0067BDF7 /* ItemDetailsViewController.swift */; };
+		354D5A962BCA91A40067BDF7 /* Numeric+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A952BCA91A40067BDF7 /* Numeric+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +75,8 @@
 		354D5A8C2BCA5E950067BDF7 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		354D5A8E2BCA5F310067BDF7 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		354D5A902BCA60C10067BDF7 /* CustomFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFilterView.swift; sourceTree = "<group>"; };
+		354D5A932BCA896D0067BDF7 /* ItemDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailsViewController.swift; sourceTree = "<group>"; };
+		354D5A952BCA91A40067BDF7 /* Numeric+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Numeric+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,8 +172,8 @@
 		354D5A712BCA5C3E0067BDF7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				354D5A922BCA894D0067BDF7 /* ItemDetailsView */,
 				354D5A752BCA5D500067BDF7 /* HomeView */,
-				354D5A782BCA5D760067BDF7 /* SubViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -203,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				354D5A762BCA5D710067BDF7 /* HomeViewController.swift */,
+				354D5A782BCA5D760067BDF7 /* SubViews */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -239,8 +244,17 @@
 				354D5A812BCA5DF20067BDF7 /* UIColor+Extension.swift */,
 				354D5A822BCA5DF20067BDF7 /* UIView+Extension.swift */,
 				354D5A832BCA5DF20067BDF7 /* UIImage+Extension.swift */,
+				354D5A952BCA91A40067BDF7 /* Numeric+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		354D5A922BCA894D0067BDF7 /* ItemDetailsView */ = {
+			isa = PBXGroup;
+			children = (
+				354D5A932BCA896D0067BDF7 /* ItemDetailsViewController.swift */,
+			);
+			path = ItemDetailsView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				354D5A962BCA91A40067BDF7 /* Numeric+Extension.swift in Sources */,
 				354D5A452BCA59D50067BDF7 /* ViewController.swift in Sources */,
 				354D5A8A2BCA5E4B0067BDF7 /* HomeViewModel.swift in Sources */,
 				354D5A412BCA59D50067BDF7 /* AppDelegate.swift in Sources */,
@@ -388,6 +403,7 @@
 				354D5A852BCA5DF20067BDF7 /* UIColor+Extension.swift in Sources */,
 				354D5A8D2BCA5E950067BDF7 /* NetworkService.swift in Sources */,
 				354D5A8F2BCA5F310067BDF7 /* Item.swift in Sources */,
+				354D5A942BCA896D0067BDF7 /* ItemDetailsViewController.swift in Sources */,
 				354D5A8B2BCA5E4B0067BDF7 /* ItemViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

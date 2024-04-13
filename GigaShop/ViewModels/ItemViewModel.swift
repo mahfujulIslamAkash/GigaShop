@@ -12,8 +12,15 @@ final class ItemViewModel{
     var isLoading: ObservableObject<Bool> = ObservableObject(true)
     private var image: UIImage?
     private var path: String?
-    init(path: String? = nil) {
-        self.path = path
+    let price: Double?
+    let review: Double?
+    let reviewCount: Int?
+    
+    init(item: Item? = nil) {
+        self.path = item?.placeHolder
+        self.price = item?.price
+        self.review = item?.review
+        self.reviewCount = item?.reviewCount
     }
     
     private func gettingGifDataOf(completion: @escaping(Data?, Bool)->Void){
@@ -62,4 +69,6 @@ final class ItemViewModel{
             return nil
         }
     }
+    
+    
 }

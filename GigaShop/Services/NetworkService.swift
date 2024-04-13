@@ -101,7 +101,7 @@ final class NetworkService{
                                     
                                     
                                 }
-                                gifs.append(gif)
+                                gifs.append(modified(gif))
                             }
                             result = gifs
                             completion(true)
@@ -160,7 +160,7 @@ final class NetworkService{
                                     
                                     
                                 }
-                                gifs.append(gif)
+                                gifs.append(modified(gif))
                             }
                             result = gifs
                             completion(true)
@@ -192,6 +192,67 @@ final class NetworkService{
     //This func will be called by the VM
     func getGifResults()->[Item]?{
         return result
+    }
+    
+//    func sortResult(_ highReview: Bool, _ lowPrice: Bool, _ highReviewCount: Bool) {
+//        if var result = result {
+//            result.sort { (item1, item2) in
+//                // Sort by review count
+//                if item1.reviewCount == item2.reviewCount {
+//                    // If review count is the same, sort by review
+//                    if item1.review == item2.review {
+//                        // If review is the same, sort by price
+//                        return lowPrice ? (item1.price ?? 0.0 < item2.price ?? 0.0) : (item1.price ?? 0.0 > item2.price ?? 0.0)
+//                    } else {
+//                        // Sort by review
+//                        return highReview ? (item1.review ?? 0.0 > item2.review ?? 0.0) : (item1.review ?? 0.0 < item2.review ?? 0.0)
+//                    }
+//                } else {
+//                    // Sort by review count
+//                    return highReviewCount ? (item1.reviewCount ?? 0 > item2.reviewCount ?? 0) : (item1.reviewCount ?? 0 < item2.reviewCount ?? 0)
+//                }
+//            }
+//            
+//            // Update the result array
+//            self.result = result
+//        }
+//    }
+    func sortResult(_ highPrice: Bool, _ highReview: Bool, _ highReviewCount: Bool) {
+        if var result = result {
+            // Sort by price
+            if highPrice {
+                result.sort { $0.price ?? 0.0 > $1.price ?? 0.0 }
+            } else {
+                result.sort { $0.price ?? 0.0 < $1.price ?? 0.0 }
+            }
+            
+            // Sort by review
+            if highReview {
+                result.sort { $0.review ?? 0.0 > $1.review ?? 0.0 }
+            } else {
+                result.sort { $0.review ?? 0.0 < $1.review ?? 0.0 }
+            }
+            
+            // Sort by review count
+            if highReviewCount {
+                result.sort { $0.reviewCount ?? 0 > $1.reviewCount ?? 0 }
+            } else {
+                result.sort { $0.reviewCount ?? 0 < $1.reviewCount ?? 0 }
+            }
+            
+            // Update the result array
+            self.result = result
+        }
+    }
+
+
+    
+    func modified(_ main: Item)-> Item{
+        var item = main
+        item.price = ((Double.random(in: 10..<1000)*100).rounded())/100
+        item.review = ((Double.random(in: 0..<5)*100).rounded())/100
+        item.reviewCount = Int.random(in: 0..<1000)
+        return item
     }
     
     //This function fetch the data from URL_path

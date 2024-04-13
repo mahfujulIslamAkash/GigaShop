@@ -11,4 +11,7 @@ struct Item{
     var url: String?
     var placeHolder: String?
     var original: String?
+    var price: Double?
+    var review: Double?
+    var reviewCount: Int?
 }

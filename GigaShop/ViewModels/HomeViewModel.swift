@@ -42,7 +42,7 @@ class HomeViewModel{
     
     func getCell(_ collectionView: UICollectionView, _ indexPath: IndexPath)->UICollectionViewCell{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ItemCollectionViewCell
-        cell.gifViewModel = viewModelOfGif(indexPath)
+        cell.itemViewModel = viewModelOfGif(indexPath)
         cell.setupBinders()
         return cell
     }
@@ -63,16 +63,19 @@ class HomeViewModel{
     func priceFilter(){
         priceUp.toggle()
         //adding data toggle functionality here
+        HomeViewModel.shared.sortResult(priceUp, reviewUp, reviewCountUp)
         isLoaded.value = true
     }
     func reviewFilter(){
         reviewUp.toggle()
         //adding data toggle functionality here
+        HomeViewModel.shared.sortResult(priceUp, reviewUp, reviewCountUp)
         isLoaded.value = true
     }
     func reviewCountFilter(){
         reviewCountUp.toggle()
         //adding data toggle functionality here
+        HomeViewModel.shared.sortResult(priceUp, reviewUp, reviewCountUp)
         isLoaded.value = true
     }
     
@@ -108,12 +111,11 @@ class HomeViewModel{
         })
     }
     
-    private func getPreviewGifPath(_ indexPath: IndexPath) -> String{
+    private func getPreviewGifPath(_ indexPath: IndexPath) -> Item?{
         guard let gifs = HomeViewModel.shared.getGifResults() else{
-            return ""
+            return nil
         }
-        guard let path = gifs[indexPath.row].placeHolder else { return "" }
-        return path
+        return gifs[indexPath.row]
     }
     
     private func getOriginalGifPath(_ indexPath: IndexPath) -> String{
@@ -125,8 +127,8 @@ class HomeViewModel{
     }
     
     private func viewModelOfGif(_ indexPath: IndexPath) -> ItemViewModel{
-        let path = getPreviewGifPath(indexPath)
-        return ItemViewModel(path: path)
+        let item = getPreviewGifPath(indexPath)
+        return ItemViewModel(item: item)
     }
     
     //MARK: testing purpose for mine

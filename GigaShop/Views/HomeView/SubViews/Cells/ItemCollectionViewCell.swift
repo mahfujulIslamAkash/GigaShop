@@ -25,10 +25,39 @@ class ItemCollectionViewCell: UICollectionViewCell {
         view.layer.masksToBounds = true
         view.clipsToBounds = true
         
+        //
+        let stack = UIStackView()
+        stack.axis = .vertical
+        view.addSubview(stack)
+        stack.fillSuperview()
+        
+        stack.addArrangedSubview(priceTitle)
+        stack.addArrangedSubview(reviewTitle)
+        stack.addArrangedSubview(reviewCountTitle)
+        
+        //
+        
         return view
     }()
+    lazy var priceTitle: UILabel = {
+        let title = UILabel()
+        title.textColor = .white
+        return title
+    }()
     
-    var gifViewModel = ItemViewModel()
+    lazy var reviewTitle: UILabel = {
+        let title = UILabel()
+        title.textColor = .white
+        return title
+    }()
+    lazy var reviewCountTitle: UILabel = {
+        let title = UILabel()
+        title.textColor = .white
+        return title
+    }()
+    
+    
+    var itemViewModel = ItemViewModel()
     
     override init(frame: CGRect) {
         // Initialize your cell as usual
@@ -41,12 +70,15 @@ class ItemCollectionViewCell: UICollectionViewCell {
     func setupBinders(){
         setupLoadedBinder()
         setupIsLoadingBinder()
-        gifViewModel.fetchGifImage()
+        itemViewModel.fetchGifImage()
+        priceTitle.text = "price: " + (itemViewModel.price?.asString() ?? "")
+        reviewTitle.text = "review: " + (itemViewModel.review?.asString() ?? "")
+        reviewCountTitle.text = "reviews: " + (itemViewModel.reviewCount?.asString() ?? "")
     }
     
     //This binder will trigger after fetching online data
     private func setupLoadedBinder(){
-        gifViewModel.isLoaded.binds({[weak self] success in
+        itemViewModel.isLoaded.binds({[weak self] success in
             if success{
                 self?.updateUI()
             }
@@ -56,14 +88,14 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     //This binder will trigger when loading need to change its state
     private func setupIsLoadingBinder(){
-        gifViewModel.isLoading.binds({[weak self] isLoading in
+        itemViewModel.isLoading.binds({[weak self] isLoading in
             self?.loadingAnimation(isLoading)
         })
     }
     
     private func updateUI(){
         DispatchQueue.main.async {[weak self] in
-            self?.gifView.image = self?.gifViewModel.getGifImage()
+            self?.gifView.image = self?.itemViewModel.getGifImage()
             self?.indicatorView.stopAnimating()
         }
         
