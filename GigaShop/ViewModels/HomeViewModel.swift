@@ -16,27 +16,27 @@ class HomeViewModel{
     var isLoading: ObservableObject<Bool> = ObservableObject(true)
     var error: ObservableObject<Bool?> = ObservableObject(nil)
     
-    static var shared = NetworkService()
     
+//    static var shared = NetworkService()
+    
+    private var results: [Item]?
     private var priceUp = true
     private var reviewUp = true
     private var reviewCountUp = true
+    private var priceRange = 500.0
     
     //MARK: Support for collection View
     func countOfGifsResult() -> Int{
-        guard let gifs = HomeViewModel.shared.getGifResults() else{
+        guard let results = results else{
             return 0
         }
-        return gifs.count
+        return results.filter{$0.price ?? 0 <= priceRange}.count
         
     }
     
-    func havingGifsResult() -> Bool{
-        return false
-    }
     
     func sizeOfCell(_ parentWidget: CGFloat) -> CGSize{
-        let width = (parentWidget-40)/3
+        let width = (parentWidget-30)/2
         return CGSize(width: width, height: width)
     }
     
@@ -63,20 +63,45 @@ class HomeViewModel{
     func priceFilter(){
         priceUp.toggle()
         //adding data toggle functionality here
-        HomeViewModel.shared.sortResult(priceUp, reviewUp, reviewCountUp)
+        sortResult(priceUp, reviewUp, reviewCountUp)
         isLoaded.value = true
     }
     func reviewFilter(){
         reviewUp.toggle()
         //adding data toggle functionality here
-        HomeViewModel.shared.sortResult(priceUp, reviewUp, reviewCountUp)
+        sortResult(priceUp, reviewUp, reviewCountUp)
         isLoaded.value = true
     }
     func reviewCountFilter(){
         reviewCountUp.toggle()
         //adding data toggle functionality here
-        HomeViewModel.shared.sortResult(priceUp, reviewUp, reviewCountUp)
+        sortResult(priceUp, reviewUp, reviewCountUp)
         isLoaded.value = true
+    }
+    
+    func searchFilter(_ priceRange: Double){
+        self.priceRange = priceRange
+        isLoaded.value = true
+    }
+    
+    private func sortResult(_ highPrice: Bool, _ highReview: Bool, _ highReviewCount: Bool){
+        
+        if var results = results {
+            results.sort { (item1, item2) in
+                if item1.price != item2.price {
+                    return highPrice ? (item1.price ?? 0.0 > item2.price ?? 0.0) : (item1.price ?? 0.0 < item2.price ?? 0.0)
+                } else if item1.review != item2.review {
+                    return highReview ? (item1.review ?? 0.0 > item2.review ?? 0.0) : (item1.review ?? 0.0 < item2.review ?? 0.0)
+                } else {
+                    return highReviewCount ? (item1.reviewCount ?? 0 > item2.reviewCount ?? 0) : (item1.reviewCount ?? 0 < item2.reviewCount ?? 0)
+                }
+            }
+            
+            
+            // Update the result array
+            self.results = results
+        }
+        
     }
     
     
@@ -90,7 +115,11 @@ class HomeViewModel{
     
     private func fetchingData(_ searchedText: String?){
         isLoading.value = true
-        HomeViewModel.shared.getSearchedGifs(searchedText, completion: {[weak self] success in
+        NetworkService.shared.getSearchedGifs(searchedText, completion: {[weak self] success, results  in
+            self?.results = results
+            #warning("this is need to be maintain again later")
+            self?.sortResult(true, true, true)
+
             if success{
                 self?.isLoaded.value = success
                 self?.isLoading.value = false
@@ -98,11 +127,12 @@ class HomeViewModel{
                 self?.error.value = true
                 self?.isLoading.value = false
             }
+            
         })
     }
     
     private func checkInternet(completion: @escaping(Bool)->Void){
-        HomeViewModel.shared.checkConnectivity(completion: {[weak self] havingInternet in
+        NetworkService.shared.checkConnectivity(completion: {[weak self] havingInternet in
             if havingInternet{
                 completion(true)
             }else{
@@ -112,17 +142,17 @@ class HomeViewModel{
     }
     
     private func getPreviewGifPath(_ indexPath: IndexPath) -> Item?{
-        guard let gifs = HomeViewModel.shared.getGifResults() else{
+        guard let results = results else{
             return nil
         }
-        return gifs[indexPath.row]
+        return results.filter{$0.price ?? 0 <= priceRange}[indexPath.row]
     }
     
     private func getOriginalGifPath(_ indexPath: IndexPath) -> String{
-        guard let gifs = HomeViewModel.shared.getGifResults() else{
+        guard let results = results else{
             return ""
         }
-        guard let path = gifs[indexPath.row].original else { return "" }
+        guard let path = results.filter({$0.price ?? 0 <= priceRange})[indexPath.row].original else { return "" }
         return path
     }
     

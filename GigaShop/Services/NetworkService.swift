@@ -14,7 +14,6 @@ final class NetworkService{
     private let providerType: ProviderType = .gify
     private lazy var basePath: String = providerType == .gify ? "https://api.giphy.com/v1/gifs/search?api_key=229ac3e932794695b695e71a9076f4e5&limit=25&offset=0&rating=G&lang=en&q=" : "https://g.tenor.com/v1/search?q="
     private let searchText: String = "Trending"
-    private var result: [Item]?
     
     
     private func getPath(_ searchText: String?) -> String{
@@ -38,7 +37,7 @@ final class NetworkService{
     }
     
     //MARK: Respose for gify, tenor
-    private func getResponse(_ searchFor: String?, completion: @escaping(_ success: Bool)-> Void){
+    private func getResponse(_ searchFor: String?, completion: @escaping(_ success: Bool, _ result: [Item]?)-> Void){
         guard let url = URL(string: getPath(searchFor)) else{
             return
         }
@@ -46,15 +45,15 @@ final class NetworkService{
         let urlSession = URLSession.shared.dataTask(with: ulrRequest, completionHandler: { [weak self] data, response, error in
             
             if let _ = error{
-                completion(false)
+                completion(false, nil)
             }else{
                 if self?.providerType == .gify{
-                    self?.parsingForGify(data: data, completion: {result in
-                        completion(result)
+                    self?.parsingForGify(data: data, completion: {success, results  in
+                        completion(success, results)
                     })
                 }else{
-                    self?.parsingForTenor(data: data, completion: {result in
-                        completion(result)
+                    self?.parsingForTenor(data: data, completion: {success, results  in
+                        completion(success, results)
                     })
                 }
             }
@@ -67,7 +66,7 @@ final class NetworkService{
     }
     
     //MARK: Gify Data fetch using JSONSerialization
-    private func parsingForGify(data: Data?, completion: @escaping(_ success: Bool)-> Void){
+    private func parsingForGify(data: Data?, completion: @escaping(_ success: Bool, [Item]?)-> Void){
         if let data = data{
             do {
                 // Deserialize JSON data
@@ -75,7 +74,7 @@ final class NetworkService{
                     // Accessing the entire JSON dictionary
                     if let dataArray = json["data"] as? [[String: Any]] {
                         if dataArray.isEmpty{
-                            completion(false)
+                            completion(false, nil)
                         }else{
                             var gifs: [Item] = []
                             for data in dataArray {
@@ -103,28 +102,28 @@ final class NetworkService{
                                 }
                                 gifs.append(modified(gif))
                             }
-                            result = gifs
-                            completion(true)
+//                            result = gifs
+                            completion(true, gifs)
                         }
                         
                         
                     }else {
                         //invalid data
-                        completion(false)
+                        completion(false, nil)
                     }
                 } else {
                     //print("Invalid JSON format")
-                    completion(false)
+                    completion(false, nil)
                 }
             } catch {
                 //print("Error parsing JSON: \(error)")
-                completion(false)
+                completion(false, nil)
             }
         }
     }
     
     //MARK: Tenor Data fetch using JSONSerialization
-    private func parsingForTenor(data: Data?, completion: @escaping(_ success: Bool)-> Void){
+    private func parsingForTenor(data: Data?, completion: @escaping(_ success: Bool, [Item]?)-> Void){
         if let data = data{
             do {
                 // Deserialize JSON data
@@ -132,7 +131,7 @@ final class NetworkService{
                     // Accessing the entire JSON dictionary
                     if let dataArray = json["results"] as? [[String: Any]] {
                         if dataArray.isEmpty{
-                            completion(false)
+                            completion(false, nil)
                         }else{
                             var gifs: [Item] = []
                             for data in dataArray {
@@ -162,95 +161,38 @@ final class NetworkService{
                                 }
                                 gifs.append(modified(gif))
                             }
-                            result = gifs
-                            completion(true)
+//                            result = gifs
+                            completion(true, gifs)
                         }
                         
                         
                     }else {
                         //invalid data
-                        completion(false)
+                        completion(false, nil)
                     }
                 } else {
                     //print("Invalid JSON format")
-                    completion(false)
+                    completion(false, nil)
                 }
             } catch {
                 //print("Error parsing JSON: \(error)")
-                completion(false)
+                completion(false, nil)
             }
         }
     }
     
     //This func will be called by the VM
-    func getSearchedGifs(_ searchFor: String?, completion: @escaping(_ success: Bool)-> Void){
-        getResponse(searchFor, completion: {success in
-            completion(success)
+    func getSearchedGifs(_ searchFor: String?, completion: @escaping(_ success: Bool,_ result: [Item]?)-> Void){
+        getResponse(searchFor, completion: {success, result  in
+            completion(success, result)
         })
     }
     
-    //This func will be called by the VM
-    func getGifResults()->[Item]?{
-        return result
-    }
-    
-//    func sortResult(_ highReview: Bool, _ lowPrice: Bool, _ highReviewCount: Bool) {
-//        if var result = result {
-//            result.sort { (item1, item2) in
-//                // Sort by review count
-//                if item1.reviewCount == item2.reviewCount {
-//                    // If review count is the same, sort by review
-//                    if item1.review == item2.review {
-//                        // If review is the same, sort by price
-//                        return lowPrice ? (item1.price ?? 0.0 < item2.price ?? 0.0) : (item1.price ?? 0.0 > item2.price ?? 0.0)
-//                    } else {
-//                        // Sort by review
-//                        return highReview ? (item1.review ?? 0.0 > item2.review ?? 0.0) : (item1.review ?? 0.0 < item2.review ?? 0.0)
-//                    }
-//                } else {
-//                    // Sort by review count
-//                    return highReviewCount ? (item1.reviewCount ?? 0 > item2.reviewCount ?? 0) : (item1.reviewCount ?? 0 < item2.reviewCount ?? 0)
-//                }
-//            }
-//            
-//            // Update the result array
-//            self.result = result
-//        }
-//    }
-    func sortResult(_ highPrice: Bool, _ highReview: Bool, _ highReviewCount: Bool) {
-        if var result = result {
-            // Sort by price
-            if highPrice {
-                result.sort { $0.price ?? 0.0 > $1.price ?? 0.0 }
-            } else {
-                result.sort { $0.price ?? 0.0 < $1.price ?? 0.0 }
-            }
-            
-            // Sort by review
-            if highReview {
-                result.sort { $0.review ?? 0.0 > $1.review ?? 0.0 }
-            } else {
-                result.sort { $0.review ?? 0.0 < $1.review ?? 0.0 }
-            }
-            
-            // Sort by review count
-            if highReviewCount {
-                result.sort { $0.reviewCount ?? 0 > $1.reviewCount ?? 0 }
-            } else {
-                result.sort { $0.reviewCount ?? 0 < $1.reviewCount ?? 0 }
-            }
-            
-            // Update the result array
-            self.result = result
-        }
-    }
-
-
     
     func modified(_ main: Item)-> Item{
         var item = main
         item.price = ((Double.random(in: 10..<1000)*100).rounded())/100
-        item.review = ((Double.random(in: 0..<5)*100).rounded())/100
+        item.review = ((Double.random(in: 0..<5)*10).rounded())/10
         item.reviewCount = Int.random(in: 0..<1000)
         return item
     }

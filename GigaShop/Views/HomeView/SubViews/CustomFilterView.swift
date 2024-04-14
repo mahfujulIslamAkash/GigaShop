@@ -6,7 +6,31 @@
 import Foundation
 import UIKit
 
+protocol PriceDelegate{
+    func priceRange(price: Double)
+    func tappedPrice()
+    func tappedReview()
+    func tappedReviewCount()
+}
+
 class CustomFilterView: UIView{
+    
+    var delegate: PriceDelegate?
+    
+    lazy var filterStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        stack.spacing = 5
+        stack.addArrangedSubview(statckView)
+        stack.addArrangedSubview(sliderStatckView)
+        stack.layer.borderWidth = 0.5
+        stack.layer.cornerRadius = 8
+        stack.layer.masksToBounds = true
+        stack.backgroundColor = .black
+        return stack
+    }()
     
     lazy var statckView: UIStackView = {
         let stack = UIStackView()
@@ -66,6 +90,44 @@ class CustomFilterView: UIView{
         return button
     }()
     
+    lazy var sliderStatckView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        stack.distribution = .fill
+        stack.spacing = 5
+        let view = UILabel()
+        view.text = "Price range"
+        view.textColor = .white
+        stack.addArrangedSubview(view)
+        stack.addArrangedSubview(slider)
+        stack.addArrangedSubview(sliderValueLabel)
+        stack.layer.borderWidth = 0.5
+        stack.layer.cornerRadius = 8
+        stack.layer.masksToBounds = true
+        stack.backgroundColor = .black
+        return stack
+    }()
+    
+    lazy var slider: UISlider = {
+        let slider = UISlider()
+        slider.maximumValue = 1000
+        slider.minimumValue = 0
+        slider.value = 500
+        slider.tintColor = .white
+        
+        slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
+        slider.addTarget(self, action: #selector(sliderEndWith), for: [.touchUpInside, .touchUpOutside])
+        return slider
+    }()
+    
+    lazy var sliderValueLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.text = "\(slider.value)"
+        return label
+    }()
+    
     
     var motherSize: CGSize = .zero
     
@@ -82,9 +144,9 @@ class CustomFilterView: UIView{
     
     func setupUI(motherSize: CGSize){
         
-        addSubview(statckView)
-        statckView.anchorView(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 8)
-        statckView.heightAnchor.constraint(equalToConstant: motherSize.height).isActive = true
+        addSubview(filterStack)
+        filterStack.anchorView(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 8)
+        filterStack.heightAnchor.constraint(equalToConstant: motherSize.height).isActive = true
         
     }
     
@@ -95,6 +157,7 @@ class CustomFilterView: UIView{
         }else{
             priceFilter.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         }
+        delegate?.tappedPrice()
     }
     @objc func toggleReview(){
         reviewUp.toggle()
@@ -103,6 +166,7 @@ class CustomFilterView: UIView{
         }else{
             reviewFilter.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         }
+        delegate?.tappedReview()
     }
     @objc func toggleReviewCount(){
         reviewCountUp.toggle()
@@ -111,6 +175,17 @@ class CustomFilterView: UIView{
         }else{
             reviewCountFilter.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         }
+        delegate?.tappedReviewCount()
+    }
+    
+    @objc func sliderEndWith(_ sender: UISlider){
+//        sliderValueLabel.text = ((slider.value*10).rounded()/10).asString()
+        delegate?.priceRange(price: Double(sender.value))
+        
+    }
+    
+    @objc func sliderValueChanged(_ sender: UISlider) {
+        sliderValueLabel.text = ((slider.value*10).rounded()/10).asString()
     }
     
     

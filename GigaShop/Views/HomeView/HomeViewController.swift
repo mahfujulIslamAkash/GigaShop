@@ -17,10 +17,8 @@ class HomeViewController: UIViewController {
     }()
     
     lazy var customFilterView: CustomFilterView = {
-        let field = CustomFilterView(motherSize: CGSize(width: view.frame.width, height: 65))
-        field.priceFilter.addTarget(self, action: #selector(priceTapped), for: .touchDown)
-        field.reviewFilter.addTarget(self, action: #selector(reviewTapped), for: .touchDown)
-        field.reviewCountFilter.addTarget(self, action: #selector(reviewCountTapped), for: .touchDown)
+        let field = CustomFilterView(motherSize: CGSize(width: view.frame.width, height: 80))
+        field.delegate = self
         return field
     }()
     
@@ -129,16 +127,6 @@ class HomeViewController: UIViewController {
         let _ = homeViewModel.SearchAction(customSearchField.textFieldView)
     }
     
-    //MARK: Filter Action
-    @objc func priceTapped(){
-        homeViewModel.priceFilter()
-    }
-    @objc func reviewTapped(){
-        homeViewModel.reviewFilter()
-    }
-    @objc func reviewCountTapped(){
-        homeViewModel.reviewCountFilter()
-    }
 }
 
 //MARK: CollectionView Delegate
@@ -155,6 +143,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        homeViewModel.copyToClipboard(indexPath)
+        
     }
     
     
@@ -165,4 +154,24 @@ extension HomeViewController: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return homeViewModel.SearchAction(customSearchField.textFieldView)
     }
+}
+
+extension HomeViewController: PriceDelegate{
+    func tappedPrice() {
+        homeViewModel.priceFilter()
+    }
+    
+    func tappedReview() {
+        homeViewModel.reviewFilter()
+    }
+    
+    func tappedReviewCount() {
+        homeViewModel.reviewCountFilter()
+    }
+    
+    func priceRange(price: Double) {
+        homeViewModel.searchFilter(price)
+    }
+    
+    
 }

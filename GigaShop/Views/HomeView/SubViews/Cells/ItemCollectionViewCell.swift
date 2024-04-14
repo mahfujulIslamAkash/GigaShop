@@ -26,14 +26,21 @@ class ItemCollectionViewCell: UICollectionViewCell {
         view.clipsToBounds = true
         
         //
+        let backImage = GradientShadowView()
+//        backImage.layer.borderWidth = 0.5
+        
         let stack = UIStackView()
         stack.axis = .vertical
-        view.addSubview(stack)
-        stack.fillSuperview()
+        view.addSubview(backImage)
+        backImage.addSubview(stack)
+        backImage.anchorView(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 0, paddingBottom: 0)
+        stack.fillSuperview(padding: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        stack.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
         stack.addArrangedSubview(priceTitle)
         stack.addArrangedSubview(reviewTitle)
         stack.addArrangedSubview(reviewCountTitle)
+        
         
         //
         
@@ -71,9 +78,9 @@ class ItemCollectionViewCell: UICollectionViewCell {
         setupLoadedBinder()
         setupIsLoadingBinder()
         itemViewModel.fetchGifImage()
-        priceTitle.text = "price: " + (itemViewModel.price?.asString() ?? "")
-        reviewTitle.text = "review: " + (itemViewModel.review?.asString() ?? "")
-        reviewCountTitle.text = "reviews: " + (itemViewModel.reviewCount?.asString() ?? "")
+        priceTitle.text = "Price: " + (itemViewModel.price?.asString() ?? "")
+        reviewTitle.text = "⭐️: " + (itemViewModel.review?.asString() ?? "")
+        reviewCountTitle.text = "Reviews: " + (itemViewModel.reviewCount?.asString() ?? "")
     }
     
     //This binder will trigger after fetching online data
@@ -117,3 +124,4 @@ class ItemCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
