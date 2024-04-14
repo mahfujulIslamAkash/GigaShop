@@ -171,8 +171,8 @@
 		354D5A712BCA5C3E0067BDF7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				354D5A922BCA894D0067BDF7 /* ItemDetailsView */,
 				354D5A752BCA5D500067BDF7 /* HomeView */,
+				354D5A922BCA894D0067BDF7 /* ItemDetailsView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
