@@ -143,6 +143,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        homeViewModel.copyToClipboard(indexPath)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "itemVC") as! ItemDetailsViewController
+        navigationController?.pushViewController(vc, animated: true)
         
     }
     
