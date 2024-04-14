@@ -26,7 +26,7 @@ class HomeViewModel{
     private var priceRange = 500.0
     
     //MARK: Support for collection View
-    func countOfGifsResult() -> Int{
+    func countOfItemResults() -> Int{
         guard let results = results else{
             return 0
         }
@@ -42,15 +42,19 @@ class HomeViewModel{
     
     func getCell(_ collectionView: UICollectionView, _ indexPath: IndexPath)->UICollectionViewCell{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ItemCollectionViewCell
-        cell.itemViewModel = viewModelOfGif(indexPath)
+        cell.itemViewModel = viewModelOfItem(indexPath)
         cell.setupBinders()
         return cell
     }
     
     //MARK: Actions
     func SearchAction(_ textField: UITextField?) -> Bool{
+        
         if let textField = textField{
-            callApi(textField.text)
+            if textField.text != ""{
+                callApi(textField.text)
+            }
+            
             return textField.resignFirstResponder()
         }else{
             callApi(nil)
@@ -141,7 +145,7 @@ class HomeViewModel{
         })
     }
     
-    private func getPreviewGifPath(_ indexPath: IndexPath) -> Item?{
+    private func getItem(_ indexPath: IndexPath) -> Item?{
         guard let results = results else{
             return nil
         }
@@ -156,8 +160,8 @@ class HomeViewModel{
         return path
     }
     
-    private func viewModelOfGif(_ indexPath: IndexPath) -> ItemViewModel{
-        let item = getPreviewGifPath(indexPath)
+    func viewModelOfItem(_ indexPath: IndexPath) -> ItemViewModel{
+        let item = getItem(indexPath)
         return ItemViewModel(item: item)
     }
     
