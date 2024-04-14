@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         let navVC = UINavigationController(rootViewController: HomeViewController())
         navVC.navigationBar.tintColor = .black
+        navVC.navigationBar.isHidden = true
         window.rootViewController = navVC
         self.window = window
         
