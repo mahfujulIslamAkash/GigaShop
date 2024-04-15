@@ -45,13 +45,13 @@ final class NetworkService{
         
     }
     private func getURLRequest(_ searchFor: String?) -> URLRequest?{
-        let url = basePath
+        guard let url = URL(string: basePath) else { return nil }
         
         guard let httpBody = getHttpBodyfromJSON(searchFor) else{
             return nil
         }
         
-        var request = URLRequest(url: URL(string: "https://api.doozie.shop/v1/items/search")!)
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = httpBody
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "0CA23F53-B9D9-42B2-A15B-877292AF5704"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6D1C8A99-55EF-4661-A735-3E89EDB9773C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GigaShop/Views/SubViews/CustomFilterView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "togglePrice()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6D1C8A99-55EF-4661-A735-3E89EDB9773C - 43aa27282a235d75"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GigaShop.CustomFilterView.togglePrice() -&gt; ()"
+                  moduleName = "GigaShop"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/appnapmahfuj/Desktop/Practices/Xcodes/GigaShop/GigaShop/Views/SubViews/CustomFilterView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "94"
+                  endingLineNumber = "94"
+                  offsetFromSymbolStart = "88">
+               </Location>
+               <Location
+                  uuid = "6D1C8A99-55EF-4661-A735-3E89EDB9773C - 43aa27282a235db7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GigaShop.CustomFilterView.togglePrice() -&gt; ()"
+                  moduleName = "GigaShop"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/appnapmahfuj/Desktop/Practices/Xcodes/GigaShop/GigaShop/Views/SubViews/CustomFilterView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "108">
+               </Location>
+               <Location
+                  uuid = "6D1C8A99-55EF-4661-A735-3E89EDB9773C - 43aa27282a235db7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GigaShop.CustomFilterView.togglePrice() -&gt; ()"
+                  moduleName = "GigaShop"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/appnapmahfuj/Desktop/Practices/Xcodes/GigaShop/GigaShop/Views/SubViews/CustomFilterView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93C770FD-05B5-4A45-8EC0-B248B5197284"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GigaShop/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "searchTapped()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B86E3590-6DD8-457D-BCB7-D48F52A578AA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GigaShop/Views/ItemDetailsView/ItemDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "backButton(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B86E3590-6DD8-457D-BCB7-D48F52A578AA - 5f1164b699230027"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GigaShop.ItemDetailsViewController.backButton(__C.UIButton) -&gt; ()"
+                  moduleName = "GigaShop"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/appnapmahfuj/Desktop/Practices/Xcodes/GigaShop/GigaShop/Views/ItemDetailsView/ItemDetailsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "76"
+                  endingLineNumber = "76"
+                  offsetFromSymbolStart = "208">
+               </Location>
+               <Location
+                  uuid = "B86E3590-6DD8-457D-BCB7-D48F52A578AA - 5f1164b699230027"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GigaShop.ItemDetailsViewController.backButton(__C.UIButton) -&gt; ()"
+                  moduleName = "GigaShop"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/appnapmahfuj/Desktop/Practices/Xcodes/GigaShop/GigaShop/Views/ItemDetailsView/ItemDetailsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "76"
+                  endingLineNumber = "76"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

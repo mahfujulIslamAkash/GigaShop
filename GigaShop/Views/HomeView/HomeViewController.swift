@@ -143,8 +143,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        homeViewModel.copyToClipboard(indexPath)
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "itemVC") as! ItemDetailsViewController
-        vc.itemViewModel = homeViewModel.viewModelOfItem(indexPath)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "itemVC") as! ProductDetailsViewController
+        vc.productViewModel = homeViewModel.viewModelOfItem(indexPath)
 //        vc.setupBinders()
         navigationController?.pushViewController(vc, animated: true)
         
@@ -161,20 +161,12 @@ extension HomeViewController: UITextFieldDelegate{
 }
 
 extension HomeViewController: PriceDelegate{
-    func tappedPrice() {
-        homeViewModel.priceFilter()
-    }
     
-    func tappedReview() {
-        homeViewModel.reviewFilter()
+    func sortedBy(sortedBy: SortType) {
+        homeViewModel.sortedBy(sortedBy: sortedBy)
     }
-    
-    func tappedReviewCount() {
-        homeViewModel.reviewCountFilter()
-    }
-    
-    func priceRange(price: Double) {
-        homeViewModel.searchFilter(price)
+    func priceRangeFilter(price: Double) {
+        homeViewModel.priceRangeFilter(price)
     }
     
     

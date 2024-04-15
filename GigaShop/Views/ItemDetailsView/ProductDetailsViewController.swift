@@ -17,7 +17,7 @@ class ProductDetailsViewController: UIViewController {
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var productImage: UIImageView!
     
-    var itemViewModel = ProductViewModel()
+    var productViewModel = ProductViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,19 +28,19 @@ class ProductDetailsViewController: UIViewController {
     func setupBinders(){
         setupLoadedBinder()
         setupIsLoadingBinder()
-        itemViewModel.fetchImage()
+        productViewModel.fetchImage()
         
-        titleLabel.text = "Title: " + itemViewModel.getTitle()
-        priceLabel.text = "Price: " + itemViewModel.getPrice()
-        reviewLabel.text = "⭐️: " + itemViewModel.getReview()
-        reviewsLable.text = "Reviews: " + itemViewModel.getTotalReviews()
-        descriptionLable.text = itemViewModel.getDescription()
+        titleLabel.text = "Title: " + productViewModel.getTitle()
+        priceLabel.text = "Price: " + productViewModel.getPrice()
+        reviewLabel.text = "⭐️: " + productViewModel.getReview()
+        reviewsLable.text = "Reviews: " + productViewModel.getTotalReviews()
+        descriptionLable.text = productViewModel.getDescription()
         
     }
     
     //This binder will trigger after fetching online data
     private func setupLoadedBinder(){
-        itemViewModel.isLoaded.binds({[weak self] success in
+        productViewModel.isLoaded.binds({[weak self] success in
             if success{
                 self?.updateUI()
             }
@@ -50,7 +50,7 @@ class ProductDetailsViewController: UIViewController {
     
     //This binder will trigger when loading need to change its state
     private func setupIsLoadingBinder(){
-        itemViewModel.isLoading.binds({[weak self] isLoading in
+        productViewModel.isLoading.binds({[weak self] isLoading in
             self?.loadingAnimation(isLoading)
         })
     }
@@ -69,7 +69,7 @@ class ProductDetailsViewController: UIViewController {
     
     private func updateUI(){
         DispatchQueue.main.async {[weak self] in
-            self?.productImage.image = self?.itemViewModel.getImage()
+            self?.productImage.image = self?.productViewModel.getImage()
             self?.indicatorView.stopAnimating()
             
         }

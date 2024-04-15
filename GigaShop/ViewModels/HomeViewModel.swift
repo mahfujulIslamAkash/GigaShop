@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 
 class HomeViewModel{
-    
+    //initial constructor
     init(_ searchText: String?){
         callApi(searchText)
     }
@@ -16,21 +16,23 @@ class HomeViewModel{
     var isLoading: ObservableObject<Bool> = ObservableObject(true)
     var error: ObservableObject<Bool?> = ObservableObject(nil)
     
-    
-//    static var shared = NetworkService()
-    
     private var results: [Product]?
-    private var priceUp = true
-    private var reviewUp = true
-    private var reviewCountUp = true
-    private var priceRange = 5000.0
+    private var priceRange: Double?
     
     //MARK: Support for collection View
     func countOfItemResults() -> Int{
-        guard let results = results else{
-            return 0
+        if let priceRange = priceRange{
+            guard let results = results else{
+                return 0
+            }
+            return results.filter{$0.price ?? 0 <= priceRange}.count
+        }else{
+            guard let results = results else{
+                return 0
+            }
+            return results.count
         }
-        return results.filter{$0.price ?? 0 <= priceRange}.count
+        
         
     }
     
@@ -42,7 +44,7 @@ class HomeViewModel{
     
     func getCell(_ collectionView: UICollectionView, _ indexPath: IndexPath)->UICollectionViewCell{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ItemCollectionViewCell
-        cell.itemViewModel = viewModelOfItem(indexPath)
+        cell.productViewModel = viewModelOfItem(indexPath)
         cell.setupBinders()
         return cell
     }
@@ -64,48 +66,34 @@ class HomeViewModel{
     }
     
     //MARK: Filters
-    func priceFilter(){
-        priceUp.toggle()
-        //adding data toggle functionality here
-        sortResult(priceUp, reviewUp, reviewCountUp)
-        isLoaded.value = true
-    }
-    func reviewFilter(){
-        reviewUp.toggle()
-        //adding data toggle functionality here
-        sortResult(priceUp, reviewUp, reviewCountUp)
-        isLoaded.value = true
-    }
-    func reviewCountFilter(){
-        reviewCountUp.toggle()
-        //adding data toggle functionality here
-        sortResult(priceUp, reviewUp, reviewCountUp)
-        isLoaded.value = true
-    }
-    
-    func searchFilter(_ priceRange: Double){
+    func priceRangeFilter(_ priceRange: Double){
         self.priceRange = priceRange
         isLoaded.value = true
     }
     
-    private func sortResult(_ highPrice: Bool, _ highReview: Bool, _ highReviewCount: Bool){
-        
-        if var results = results {
-            results.sort { (item1, item2) in
-                if item1.price != item2.price {
-                    return highPrice ? (item1.price ?? 0.0 > item2.price ?? 0.0) : (item1.price ?? 0.0 < item2.price ?? 0.0)
-                } else if item1.review != item2.review {
-                    return highReview ? (item1.review ?? 0.0 > item2.review ?? 0.0) : (item1.review ?? 0.0 < item2.review ?? 0.0)
-                } else {
-                    return highReviewCount ? (item1.reviewCount ?? 0 > item2.reviewCount ?? 0) : (item1.reviewCount ?? 0 < item2.reviewCount ?? 0)
-                }
+    
+    func sortedBy(sortedBy: SortType){
+        if let results = results {
+            
+            if sortedBy == .lowPrice{
+                self.results = results.sorted{$0.price ?? 0.0 < $1.price ?? 0.0}
+            }else if sortedBy == .highPrice{
+                self.results = results.sorted{$0.price ?? 0.0 > $1.price ?? 0.0}
             }
-            
-            
-            // Update the result array
-            self.results = results
+            else if sortedBy == .lowRating{
+                self.results = results.sorted{$0.review ?? 0.0 < $1.review ?? 0.0}
+            }
+            else if sortedBy == .highRating{
+                self.results = results.sorted{$0.review ?? 0.0 > $1.review ?? 0.0}
+            }
+            else if sortedBy == .lowReviews{
+                self.results = results.sorted{$0.reviewCount ?? 0 < $1.reviewCount ?? 0}
+            }else{
+                self.results = results.sorted{$0.reviewCount ?? 0 > $1.reviewCount ?? 0}
+            }
         }
         
+        isLoaded.value = true
     }
     
     
@@ -122,7 +110,7 @@ class HomeViewModel{
         NetworkService.shared.getSearchedProductss(searchedText, completion: {[weak self] success, results  in
             self?.results = results
             #warning("this is need to be maintain again later")
-            self?.sortResult(true, true, true)
+//            self?.sortResult(true, true, true)
 
             if success{
                 self?.isLoaded.value = success
@@ -149,15 +137,26 @@ class HomeViewModel{
         guard let results = results else{
             return nil
         }
-        return results.filter{$0.price ?? 0 <= priceRange}[indexPath.row]
+        if let priceRange = priceRange{
+            return results.filter{$0.price ?? 0 <= priceRange}[indexPath.row]
+        }else{
+            return results[indexPath.row]
+        }
+        
     }
     
     private func getProductPath(_ indexPath: IndexPath) -> String{
         guard let results = results else{
             return ""
         }
-        guard let path = results.filter({$0.price ?? 0 <= priceRange})[indexPath.row].productPath else { return "" }
-        return path
+        if let priceRange = priceRange{
+            guard let path = results.filter({$0.price ?? 0 <= priceRange})[indexPath.row].productPath else { return "" }
+            return path
+        }else{
+            guard let path = results[indexPath.row].productPath else { return "" }
+            return path
+        }
+        
     }
     
     func viewModelOfItem(_ indexPath: IndexPath) -> ProductViewModel{

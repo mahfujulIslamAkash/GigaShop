@@ -64,7 +64,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     }()
     
     
-    var itemViewModel = ProductViewModel()
+    var productViewModel = ProductViewModel()
     
     override init(frame: CGRect) {
         // Initialize your cell as usual
@@ -77,15 +77,15 @@ class ItemCollectionViewCell: UICollectionViewCell {
     func setupBinders(){
         setupLoadedBinder()
         setupIsLoadingBinder()
-        itemViewModel.fetchImage()
-        priceTitle.text = "Price: " + itemViewModel.getPrice()
-        reviewTitle.text = "⭐️: " + itemViewModel.getReview()
-        reviewCountTitle.text = "Reviews: " + itemViewModel.getTotalReviews()
+        productViewModel.fetchImage()
+        priceTitle.text = "Price: " + productViewModel.getPrice()
+        reviewTitle.text = "⭐️: " + productViewModel.getReview()
+        reviewCountTitle.text = "Reviews: " + productViewModel.getTotalReviews()
     }
     
     //This binder will trigger after fetching online data
     private func setupLoadedBinder(){
-        itemViewModel.isLoaded.binds({[weak self] success in
+        productViewModel.isLoaded.binds({[weak self] success in
             if success{
                 self?.updateUI()
             }
@@ -95,14 +95,14 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     //This binder will trigger when loading need to change its state
     private func setupIsLoadingBinder(){
-        itemViewModel.isLoading.binds({[weak self] isLoading in
+        productViewModel.isLoading.binds({[weak self] isLoading in
             self?.loadingAnimation(isLoading)
         })
     }
     
     private func updateUI(){
         DispatchQueue.main.async {[weak self] in
-            self?.productImage.image = self?.itemViewModel.getImage()
+            self?.productImage.image = self?.productViewModel.getImage()
             self?.indicatorView.stopAnimating()
         }
         

@@ -49,7 +49,7 @@ class CustomSearchField: UIView {
     lazy var textFieldView: UITextField = {
         let textField = UITextField()
         textField.attributedPlaceholder  = NSAttributedString(
-            string: "Search here",
+            string: "Search your desire products",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.3)]
         )
         textField.textColor = .black.withAlphaComponent(0.5)

@@ -7,10 +7,8 @@ import Foundation
 import UIKit
 
 protocol PriceDelegate{
-    func priceRange(price: Double)
-    func tappedPrice()
-    func tappedReview()
-    func tappedReviewCount()
+    func priceRangeFilter(price: Double)
+    func sortedBy(sortedBy: SortType)
 }
 
 class CustomFilterView: UIView{
@@ -23,7 +21,7 @@ class CustomFilterView: UIView{
         stack.alignment = .fill
         stack.distribution = .fillEqually
         stack.spacing = 5
-        stack.addArrangedSubview(statckView)
+        stack.addArrangedSubview(sortStack)
         stack.addArrangedSubview(sliderStatckView)
         stack.layer.borderWidth = 0.5
         stack.layer.cornerRadius = 8
@@ -32,15 +30,14 @@ class CustomFilterView: UIView{
         return stack
     }()
     
-    lazy var statckView: UIStackView = {
+    lazy var sortStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .fill
-        stack.distribution = .fillProportionally
+        stack.distribution = .fillEqually
         stack.spacing = 5
-        stack.addArrangedSubview(priceFilter)
-        stack.addArrangedSubview(reviewFilter)
-        stack.addArrangedSubview(reviewCountFilter)
+        stack.addArrangedSubview(sortedByButton)
+        stack.addArrangedSubview(sortedByLabel)
         stack.layer.borderWidth = 0.5
         stack.layer.cornerRadius = 8
         stack.layer.masksToBounds = true
@@ -48,46 +45,38 @@ class CustomFilterView: UIView{
         return stack
     }()
     
-    lazy var priceFilter: UIButton = {
-        let button = UIButton()
-        button.setTitle("   Price", for: .normal)
+    lazy var sortedByButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Sorted By", for: .normal)
+        button.tintColor = .white
+        button.layer.borderWidth = 1.5
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.cornerRadius = 8
+        button.showsMenuAsPrimaryAction = true
         
-        if priceUp{
-            button.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-        }else{
-            button.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        var elements: [UIMenuElement] = []
+        for sortedBy in self.sortingItemList {
+            let action = UIAction(title: sortedBy.description, handler: { [weak self] value in
+                self?.sortedByLabel.text = sortedBy.description
+                self?.delegate?.sortedBy(sortedBy: sortedBy)
+            })
+            elements.append(action)
+            
+            
         }
-        
-        button.tintColor = .white
-        button.layer.borderWidth = 1.5
-        button.layer.borderColor = UIColor.white.cgColor
-        button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(togglePrice), for: .touchDown)
+        button.menu = UIMenu(title: "Sorted by", children: elements)
         return button
     }()
     
-    lazy var reviewFilter: UIButton = {
-        let button = UIButton()
-        button.setTitle("   Review", for: .normal)
-        button.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-        button.tintColor = .white
-        button.layer.borderWidth = 1.5
-        button.layer.borderColor = UIColor.white.cgColor
-        button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(toggleReview), for: .touchDown)
-        return button
-    }()
-    
-    lazy var reviewCountFilter: UIButton = {
-        let button = UIButton()
-        button.setTitle("   Review Count", for: .normal)
-        button.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-        button.tintColor = .white
-        button.layer.borderWidth = 1.5
-        button.layer.borderColor = UIColor.white.cgColor
-        button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(toggleReviewCount), for: .touchDown)
-        return button
+    lazy var sortedByLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Low Price"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.layer.borderWidth = 1.5
+        label.layer.borderColor = UIColor.white.cgColor
+        label.layer.cornerRadius = 8
+        return label
     }()
     
     lazy var sliderStatckView: UIStackView = {
@@ -111,11 +100,10 @@ class CustomFilterView: UIView{
     
     lazy var slider: UISlider = {
         let slider = UISlider()
-        slider.maximumValue = 1000
+        slider.maximumValue = 100000
         slider.minimumValue = 0
-        slider.value = 500
+        slider.value = slider.maximumValue
         slider.tintColor = .white
-        
         slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
         slider.addTarget(self, action: #selector(sliderEndWith), for: [.touchUpInside, .touchUpOutside])
         return slider
@@ -124,16 +112,21 @@ class CustomFilterView: UIView{
     lazy var sliderValueLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.text = "\(slider.value)"
+        label.text = Int(slider.value).asString()
         return label
     }()
     
+    private var sortingItemList: [SortType] = [
+        .lowPrice,
+        .highPrice,
+        .lowRating,
+        .highRating,
+        .lowReviews,
+        .highReviews,
+    ]
+    
     
     var motherSize: CGSize = .zero
-    
-    private var priceUp = true
-    private var reviewUp = true
-    private var reviewCountUp = true
     
     init(motherSize: CGSize){
         super.init(frame: .zero)
@@ -148,44 +141,17 @@ class CustomFilterView: UIView{
         filterStack.anchorView(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 8)
         filterStack.heightAnchor.constraint(equalToConstant: motherSize.height).isActive = true
         
-    }
-    
-    @objc func togglePrice(){
-        priceUp.toggle()
-        if priceUp{
-            priceFilter.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-        }else{
-            priceFilter.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        }
-        delegate?.tappedPrice()
-    }
-    @objc func toggleReview(){
-        reviewUp.toggle()
-        if reviewUp{
-            reviewFilter.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-        }else{
-            reviewFilter.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        }
-        delegate?.tappedReview()
-    }
-    @objc func toggleReviewCount(){
-        reviewCountUp.toggle()
-        if reviewCountUp{
-            reviewCountFilter.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-        }else{
-            reviewCountFilter.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        }
-        delegate?.tappedReviewCount()
+        
+        
     }
     
     @objc func sliderEndWith(_ sender: UISlider){
-//        sliderValueLabel.text = ((slider.value*10).rounded()/10).asString()
-        delegate?.priceRange(price: Double(sender.value))
+        delegate?.priceRangeFilter(price: Double(sender.value))
         
     }
     
     @objc func sliderValueChanged(_ sender: UISlider) {
-        sliderValueLabel.text = ((slider.value*10).rounded()/10).asString()
+        sliderValueLabel.text = Int(sender.value).asString()
     }
     
     
@@ -193,3 +159,4 @@ class CustomFilterView: UIView{
         fatalError("init(coder:) has not been implemented")
     }
 }
+
