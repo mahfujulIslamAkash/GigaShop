@@ -109,8 +109,7 @@ class HomeViewModel{
         isLoading.value = true
         NetworkService.shared.getSearchedProductss(searchedText, completion: {[weak self] success, results  in
             self?.results = results
-            #warning("this is need to be maintain again later")
-//            self?.sortResult(true, true, true)
+            self?.sortedBy(sortedBy: .lowPrice)
 
             if success{
                 self?.isLoaded.value = success

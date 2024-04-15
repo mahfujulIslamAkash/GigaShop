@@ -178,7 +178,9 @@ final class NetworkService{
     //This func will be called by the VM
     func gettingDataOf(_ dataPath: String, completion: @escaping(Data?)->Void){
         if let url = URL(string: dataPath){
-            URLSession.shared.dataTask(with: url, completionHandler: {data, response, error in
+            var request = URLRequest(url: url)
+            request.timeoutInterval = 180
+            URLSession.shared.dataTask(with: request, completionHandler: {data, response, error in
                 if let _ = error{
                     completion(nil)
                 }else{
