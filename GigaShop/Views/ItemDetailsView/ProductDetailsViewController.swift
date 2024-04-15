@@ -9,6 +9,7 @@ import UIKit
 
 class ProductDetailsViewController: UIViewController {
     
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     @IBOutlet weak var descriptionLable: UILabel!
     @IBOutlet weak var reviewLabel: UILabel!
@@ -28,9 +29,12 @@ class ProductDetailsViewController: UIViewController {
         setupLoadedBinder()
         setupIsLoadingBinder()
         itemViewModel.fetchImage()
-        priceLabel.text = "Price: " + (itemViewModel.price?.asString() ?? "")
-        reviewLabel.text = "⭐️: " + (itemViewModel.review?.asString() ?? "")
-        reviewsLable.text = "Reviews: " + (itemViewModel.reviewCount?.asString() ?? "")
+        
+        titleLabel.text = "Title: " + itemViewModel.getTitle()
+        priceLabel.text = "Price: " + itemViewModel.getPrice()
+        reviewLabel.text = "⭐️: " + itemViewModel.getReview()
+        reviewsLable.text = "Reviews: " + itemViewModel.getTotalReviews()
+        descriptionLable.text = itemViewModel.getDescription()
         
     }
     

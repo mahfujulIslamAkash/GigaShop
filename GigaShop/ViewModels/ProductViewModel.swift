@@ -8,23 +8,58 @@ import Foundation
 import UIKit
 
 final class ProductViewModel{
+    //Observers
     var isLoaded: ObservableObject<Bool> = ObservableObject(false)
     var isLoading: ObservableObject<Bool> = ObservableObject(true)
+    
     private var image: UIImage?
-    private var path: String?
-    let price: Double?
-    let review: Double?
-    let reviewCount: Int?
+    private let product: Product?
     
     init(product: Product? = nil) {
-        self.path = product?.productImagePath
-        self.price = product?.price
-        self.review = product?.review
-        self.reviewCount = product?.reviewCount
+        self.product = product
+    }
+    
+    func getPrice() -> String{
+        if let price = product?.price, let currency = product?.currency{
+            return price.asString() + currency.uppercased()
+        }else{
+            return "Free"
+        }
+        
+    }
+    func getReview() -> String{
+        if let review = product?.review{
+            return review.asString()
+        }else{
+            return "0.0"
+        }
+    }
+    
+    func getTotalReviews() -> String{
+        if let reviews = product?.reviewCount{
+            return reviews.asString()
+        }else{
+            return "0.0"
+        }
+    }
+    
+    func getTitle() -> String{
+        if let title = product?.title{
+            return title
+        }else{
+            return "N/A"
+        }
+    }
+    func getDescription() -> String{
+        if let description = product?.description{
+            return description
+        }else{
+            return "N/A"
+        }
     }
     
     private func gettingDataFromPath(completion: @escaping(Data?, Bool)->Void){
-        if let path = path{
+        if let path = product?.productImagePath{
             NetworkService.shared.gettingDataOf(path, completion: {data in
                 if let data = data{
                     //success here

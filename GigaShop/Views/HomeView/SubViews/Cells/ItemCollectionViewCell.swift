@@ -78,9 +78,9 @@ class ItemCollectionViewCell: UICollectionViewCell {
         setupLoadedBinder()
         setupIsLoadingBinder()
         itemViewModel.fetchImage()
-        priceTitle.text = "Price: " + (itemViewModel.price?.asString() ?? "")
-        reviewTitle.text = "⭐️: " + (itemViewModel.review?.asString() ?? "")
-        reviewCountTitle.text = "Reviews: " + (itemViewModel.reviewCount?.asString() ?? "")
+        priceTitle.text = "Price: " + itemViewModel.getPrice()
+        reviewTitle.text = "⭐️: " + itemViewModel.getReview()
+        reviewCountTitle.text = "Reviews: " + itemViewModel.getTotalReviews()
     }
     
     //This binder will trigger after fetching online data

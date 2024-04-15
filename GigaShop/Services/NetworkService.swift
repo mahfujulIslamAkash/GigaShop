@@ -144,6 +144,9 @@ final class NetworkService{
                                 if let price = data["price"] as? Double{
                                     product.price = price
                                 }
+                                if let currency = data["currency"] as? String{
+                                    product.currency = currency
+                                }
                                 if let shopURL = data["shop_url"] as? String{
                                     product.shopPath = shopURL
                                 }
