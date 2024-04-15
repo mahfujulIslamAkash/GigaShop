@@ -18,6 +18,7 @@ class HomeViewModel{
     
     private var results: [Product]?
     private var priceRange: Double?
+    private var sortedBy: SortType?
     
     //MARK: Support for collection View
     func countOfItemResults() -> Int{
@@ -73,20 +74,21 @@ class HomeViewModel{
     
     
     func sortedBy(sortedBy: SortType){
+        self.sortedBy = sortedBy
         if let results = results {
             
-            if sortedBy == .lowPrice{
+            if self.sortedBy == .lowPrice{
                 self.results = results.sorted{$0.price ?? 0.0 < $1.price ?? 0.0}
-            }else if sortedBy == .highPrice{
+            }else if self.sortedBy == .highPrice{
                 self.results = results.sorted{$0.price ?? 0.0 > $1.price ?? 0.0}
             }
-            else if sortedBy == .lowRating{
+            else if self.sortedBy == .lowRating{
                 self.results = results.sorted{$0.review ?? 0.0 < $1.review ?? 0.0}
             }
-            else if sortedBy == .highRating{
+            else if self.sortedBy == .highRating{
                 self.results = results.sorted{$0.review ?? 0.0 > $1.review ?? 0.0}
             }
-            else if sortedBy == .lowReviews{
+            else if self.sortedBy == .lowReviews{
                 self.results = results.sorted{$0.reviewCount ?? 0 < $1.reviewCount ?? 0}
             }else{
                 self.results = results.sorted{$0.reviewCount ?? 0 > $1.reviewCount ?? 0}
@@ -109,7 +111,13 @@ class HomeViewModel{
         isLoading.value = true
         NetworkService.shared.getSearchedProductss(searchedText, completion: {[weak self] success, results  in
             self?.results = results
-            self?.sortedBy(sortedBy: .lowPrice)
+            
+            if let sortedBy = self?.sortedBy{
+                self?.sortedBy(sortedBy: sortedBy)
+            }else{
+                self?.sortedBy(sortedBy: .lowPrice)
+            }
+            
 
             if success{
                 self?.isLoaded.value = success

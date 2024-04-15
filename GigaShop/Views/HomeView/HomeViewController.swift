@@ -32,9 +32,7 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .black
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         view.showsVerticalScrollIndicator = false
-        view.addSubview(indicatorView)
-        indicatorView.centerX(inView: view)
-        indicatorView.centerY(inView: view)
+        
         return view
         
     }()
@@ -55,6 +53,9 @@ class HomeViewController: UIViewController {
         stack.addArrangedSubview(customFilterView)
         stack.addArrangedSubview(ItemCollectionView)
         stack.layer.borderWidth = 0.5
+        stack.addSubview(indicatorView)
+        indicatorView.centerX(inView: stack)
+        indicatorView.centerY(inView: stack)
         return stack
     }()
     
@@ -65,6 +66,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         view.addSubview(stackView)
+        
         stackView.anchorView(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, paddingTop: 60)
         setupObservers()
         
@@ -113,10 +115,12 @@ class HomeViewController: UIViewController {
     private func loadingAnimation(_ isLoading: Bool){
         if isLoading{
             DispatchQueue.main.async {[weak self] in
+                self?.ItemCollectionView.layer.opacity = 0
                 self?.indicatorView.startAnimating()
             }
         }else{
             DispatchQueue.main.async {[weak self] in
+                self?.ItemCollectionView.layer.opacity = 1
                 self?.indicatorView.stopAnimating()
             }
         }
@@ -134,7 +138,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return homeViewModel.countOfItemResults()
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return homeViewModel.getCell(collectionView, indexPath)
     }
@@ -142,10 +145,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return homeViewModel.sizeOfCell(collectionView.frame.width)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        homeViewModel.copyToClipboard(indexPath)
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "itemVC") as! ProductDetailsViewController
         vc.productViewModel = homeViewModel.viewModelOfItem(indexPath)
-//        vc.setupBinders()
         navigationController?.pushViewController(vc, animated: true)
         
     }
