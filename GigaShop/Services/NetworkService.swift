@@ -6,56 +6,98 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 #warning("Here I implemented 2 API providers because I was getting some warning from gify, thats why I added 2nd one for testing purposes")
 
 final class NetworkService{
     static var shared = NetworkService()
-    private let providerType: ProviderType = .gify
-    private lazy var basePath: String = providerType == .gify ? "https://api.giphy.com/v1/gifs/search?api_key=229ac3e932794695b695e71a9076f4e5&limit=25&offset=0&rating=G&lang=en&q=" : "https://g.tenor.com/v1/search?q="
-    private let searchText: String = "Trending"
+    private let basePath: String = "https://api.doozie.shop/v1/items/search"
+    private let searchText: String = "shirt"
     
     
-    private func getPath(_ searchText: String?) -> String{
-        if let text = searchText{
-            if providerType == .gify{
-                return basePath+text
-            }else{
-                return basePath+text+"&key=LIVDSRZULELA"
-            }
-            
+//    private func getPath(_ searchText: String?) -> String{
+//        if let text = searchText{
+//            if providerType == .gify{
+//                return basePath+text
+//            }else{
+//                return basePath+text+"&key=LIVDSRZULELA"
+//            }
+//            
+//        }
+//        else{
+//            //Default path
+//            if providerType == .gify{
+//                return basePath+self.searchText
+//            }else{
+//                return basePath+self.searchText+"&key=LIVDSRZULELA"
+//            }
+//            
+//        }
+//    }
+    private func getHttpBodyfromJSON(_ searchText: String?) -> Data?{
+        var jsonDictionary: [String: Any] = [
+            "rakuten_query_parameters": [
+                "keyword": "shirt"
+            ],
+            "yahoo_query_parameters": [
+                "query": "shirt"
+            ],
+            "from_scheduler": false
+        ]
+        if let searchText = searchText{
+            jsonDictionary = [
+                "rakuten_query_parameters": [
+                    "keyword": "\(searchText)"
+                ],
+                "yahoo_query_parameters": [
+                    "query": "\(searchText)"
+                ],
+                "from_scheduler": false
+            ]
         }
-        else{
-            //Default path
-            if providerType == .gify{
-                return basePath+self.searchText
-            }else{
-                return basePath+self.searchText+"&key=LIVDSRZULELA"
-            }
-            
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
+            return jsonData
+        }catch{
+            return nil
         }
+        
+        
+    }
+    private func getURLRequest(_ searchFor: String?) -> URLRequest?{
+        let url = basePath
+        
+        guard let httpBody = getHttpBodyfromJSON(searchFor) else{
+            return nil
+        }
+        
+        var request = URLRequest(url: URL(string: "https://api.doozie.shop/v1/items/search")!)
+        request.httpMethod = "POST"
+        request.httpBody = httpBody
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        return request
     }
     
     //MARK: Respose for gify, tenor
-    private func getResponse(_ searchFor: String?, completion: @escaping(_ success: Bool, _ result: [Item]?)-> Void){
-        guard let url = URL(string: getPath(searchFor)) else{
+    private func getResponse(_ searchFor: String?, completion: @escaping(_ success: Bool, _ result: [Product]?)-> Void){
+        
+        guard let request = getURLRequest(searchFor) else{
+            completion(false, nil)
             return
         }
-        let ulrRequest = URLRequest(url: url)
-        let urlSession = URLSession.shared.dataTask(with: ulrRequest, completionHandler: { [weak self] data, response, error in
+        let urlSession = URLSession.shared.dataTask(with: request, completionHandler: { [weak self] data, response, error in
             
             if let _ = error{
                 completion(false, nil)
             }else{
-                if self?.providerType == .gify{
-                    self?.parsingForGify(data: data, completion: {success, results  in
-                        completion(success, results)
-                    })
-                }else{
-                    self?.parsingForTenor(data: data, completion: {success, results  in
+                if let data = data {
+                    self?.parsingProducts(data: data, completion: {success, results  in
                         completion(success, results)
                     })
                 }
+                
             }
 
             
@@ -63,106 +105,59 @@ final class NetworkService{
         })
         
         urlSession.resume()
+        
+        
     }
     
     //MARK: Gify Data fetch using JSONSerialization
-    private func parsingForGify(data: Data?, completion: @escaping(_ success: Bool, [Item]?)-> Void){
+    private func parsingProducts(data: Data?, completion: @escaping(_ success: Bool, [Product]?)-> Void){
         if let data = data{
             do {
                 // Deserialize JSON data
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     // Accessing the entire JSON dictionary
-                    if let dataArray = json["data"] as? [[String: Any]] {
+                    if let dataArray = json["result"] as? [[String: Any]] {
                         if dataArray.isEmpty{
                             completion(false, nil)
                         }else{
-                            var gifs: [Item] = []
+                            var products: [Product] = []
                             for data in dataArray {
-                                var gif = Item()
-                                if let id = data["id"] as? String{
-                                    gif.id = id
+                                var product = Product()
+                                if let id = data["item_id"] as? String{
+                                    product.id = id
                                 }
-                                if let url = data["url"] as? String{
-                                    gif.url = url
+                                if let title = data["title"] as? String{
+                                    product.title = title
                                 }
-                                if let image = data["images"] as? [String: Any]{
-                                    if let original = image["original"] as? [String: Any]{
-                                        if let url = original["url"] as? String{
-                                            gif.original = url
-                                        }
+                                if let description = data["description"] as? String{
+                                    product.description = description
+                                }
+                                if let headline = data["headline"] as? String{
+                                    product.headline = headline
+                                }
+                                if let review = data["review_average"] as? Double{
+                                    product.review = review
+                                }
+                                if let reviewCount = data["review_count"] as? Int{
+                                    product.reviewCount = reviewCount
+                                }
+                                if let price = data["price"] as? Double{
+                                    product.price = price
+                                }
+                                if let shopURL = data["shop_url"] as? String{
+                                    product.shopPath = shopURL
+                                }
+                                if let productPath = data["item_url"] as? String{
+                                    product.productPath = productPath
+                                }
+                                if let images = data["image_urls"] as? [String]{
+                                    if !images.isEmpty{
+                                        product.productImagePath = images[0]
                                     }
-                                    
-                                    if let preview = image["preview_gif"] as? [String: Any]{
-                                        if let url = preview["url"] as? String{
-                                            gif.placeHolder = url
-                                        }
-                                    }
-                                    
-                                    
                                 }
-                                gifs.append(modified(gif))
+                                products.append(product)
                             }
-//                            result = gifs
-                            completion(true, gifs)
-                        }
-                        
-                        
-                    }else {
-                        //invalid data
-                        completion(false, nil)
-                    }
-                } else {
-                    //print("Invalid JSON format")
-                    completion(false, nil)
-                }
-            } catch {
-                //print("Error parsing JSON: \(error)")
-                completion(false, nil)
-            }
-        }
-    }
-    
-    //MARK: Tenor Data fetch using JSONSerialization
-    private func parsingForTenor(data: Data?, completion: @escaping(_ success: Bool, [Item]?)-> Void){
-        if let data = data{
-            do {
-                // Deserialize JSON data
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    // Accessing the entire JSON dictionary
-                    if let dataArray = json["results"] as? [[String: Any]] {
-                        if dataArray.isEmpty{
-                            completion(false, nil)
-                        }else{
-                            var gifs: [Item] = []
-                            for data in dataArray {
-                                var gif = Item()
-                                if let id = data["id"] as? String{
-                                    gif.id = id
-                                }
-                                if let url = data["url"] as? String{
-                                    gif.url = url
-                                }
-                                if let medias = data["media"] as? [[String: Any]]{
-                                    for media in medias{
-                                        if let nanoGif = media["nanogif"] as? [String: Any]{
-                                            if let previewUrl = nanoGif["url"] as? String{
-                                                gif.placeHolder = previewUrl
-                                            }
-                                        }
-                                        
-                                        if let gifObjc = media["gif"] as? [String: Any]{
-                                            if let originalUrl = gifObjc["url"] as? String{
-                                                gif.original = originalUrl
-                                            }
-                                        }
-                                    }
-                                    
-                                    
-                                }
-                                gifs.append(modified(gif))
-                            }
-//                            result = gifs
-                            completion(true, gifs)
+                            completion(true, products)
                         }
                         
                         
@@ -182,14 +177,14 @@ final class NetworkService{
     }
     
     //This func will be called by the VM
-    func getSearchedGifs(_ searchFor: String?, completion: @escaping(_ success: Bool,_ result: [Item]?)-> Void){
+    func getSearchedGifs(_ searchFor: String?, completion: @escaping(_ success: Bool,_ result: [Product]?)-> Void){
         getResponse(searchFor, completion: {success, result  in
             completion(success, result)
         })
     }
     
     
-    func modified(_ main: Item)-> Item{
+    func modified(_ main: Product)-> Product{
         var item = main
         item.price = ((Double.random(in: 10..<1000)*100).rounded())/100
         item.review = ((Double.random(in: 0..<5)*10).rounded())/10

@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 
-final class ItemViewModel{
+final class ProductViewModel{
     var isLoaded: ObservableObject<Bool> = ObservableObject(false)
     var isLoading: ObservableObject<Bool> = ObservableObject(true)
     private var image: UIImage?
@@ -16,14 +16,14 @@ final class ItemViewModel{
     let review: Double?
     let reviewCount: Int?
     
-    init(item: Item? = nil) {
-        self.path = item?.placeHolder
-        self.price = item?.price
-        self.review = item?.review
-        self.reviewCount = item?.reviewCount
+    init(product: Product? = nil) {
+        self.path = product?.productImagePath
+        self.price = product?.price
+        self.review = product?.review
+        self.reviewCount = product?.reviewCount
     }
     
-    private func gettingGifDataOf(completion: @escaping(Data?, Bool)->Void){
+    private func gettingDataFromPath(completion: @escaping(Data?, Bool)->Void){
         if let path = path{
             NetworkService.shared.gettingDataOf(path, completion: {data in
                 if let data = data{
@@ -40,9 +40,9 @@ final class ItemViewModel{
     }
     
     private func gettingImageFromPath(completion: @escaping(Bool)->Void){
-        gettingGifDataOf(completion: {[weak self] data, success in
+        gettingDataFromPath(completion: {[weak self] data, success in
             if let data = data{
-                if let image = UIImage.gifImageWithData(data){
+                if let image = UIImage.imageFromData(data){
                     self?.isLoaded.value = true
                     self?.image = image
                     completion(true)
@@ -55,14 +55,14 @@ final class ItemViewModel{
         })
     }
     
-    func fetchGifImage(){
+    func fetchImage(){
         isLoading.value = true
         gettingImageFromPath(completion: {[weak self] _ in
             self?.isLoading.value = false
         })
     }
     
-    func getGifImage() -> UIImage?{
+    func getImage() -> UIImage?{
         if let image = self.image{
             return image
         }else{

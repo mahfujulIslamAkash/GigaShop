@@ -64,7 +64,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     }()
     
     
-    var itemViewModel = ItemViewModel()
+    var itemViewModel = ProductViewModel()
     
     override init(frame: CGRect) {
         // Initialize your cell as usual
@@ -77,7 +77,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     func setupBinders(){
         setupLoadedBinder()
         setupIsLoadingBinder()
-        itemViewModel.fetchGifImage()
+        itemViewModel.fetchImage()
         priceTitle.text = "Price: " + (itemViewModel.price?.asString() ?? "")
         reviewTitle.text = "⭐️: " + (itemViewModel.review?.asString() ?? "")
         reviewCountTitle.text = "Reviews: " + (itemViewModel.reviewCount?.asString() ?? "")
@@ -102,7 +102,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     private func updateUI(){
         DispatchQueue.main.async {[weak self] in
-            self?.gifView.image = self?.itemViewModel.getGifImage()
+            self?.gifView.image = self?.itemViewModel.getImage()
             self?.indicatorView.stopAnimating()
         }
         

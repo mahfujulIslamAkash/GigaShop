@@ -19,11 +19,11 @@ class HomeViewModel{
     
 //    static var shared = NetworkService()
     
-    private var results: [Item]?
+    private var results: [Product]?
     private var priceUp = true
     private var reviewUp = true
     private var reviewCountUp = true
-    private var priceRange = 500.0
+    private var priceRange = 5000.0
     
     //MARK: Support for collection View
     func countOfItemResults() -> Int{
@@ -145,7 +145,7 @@ class HomeViewModel{
         })
     }
     
-    private func getItem(_ indexPath: IndexPath) -> Item?{
+    private func getItem(_ indexPath: IndexPath) -> Product?{
         guard let results = results else{
             return nil
         }
@@ -160,9 +160,9 @@ class HomeViewModel{
         return path
     }
     
-    func viewModelOfItem(_ indexPath: IndexPath) -> ItemViewModel{
-        let item = getItem(indexPath)
-        return ItemViewModel(item: item)
+    func viewModelOfItem(_ indexPath: IndexPath) -> ProductViewModel{
+        let product = getItem(indexPath)
+        return ProductViewModel(product: product)
     }
     
     //MARK: testing purpose for mine

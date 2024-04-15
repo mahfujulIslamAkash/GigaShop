@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ItemDetailsViewController: UIViewController {
+class ProductDetailsViewController: UIViewController {
     
     @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     @IBOutlet weak var descriptionLable: UILabel!
@@ -16,7 +16,7 @@ class ItemDetailsViewController: UIViewController {
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var productImage: UIImageView!
     
-    var itemViewModel = ItemViewModel()
+    var itemViewModel = ProductViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ class ItemDetailsViewController: UIViewController {
     func setupBinders(){
         setupLoadedBinder()
         setupIsLoadingBinder()
-        itemViewModel.fetchGifImage()
+        itemViewModel.fetchImage()
         priceLabel.text = "Price: " + (itemViewModel.price?.asString() ?? "")
         reviewLabel.text = "⭐️: " + (itemViewModel.review?.asString() ?? "")
         reviewsLable.text = "Reviews: " + (itemViewModel.reviewCount?.asString() ?? "")
@@ -65,7 +65,7 @@ class ItemDetailsViewController: UIViewController {
     
     private func updateUI(){
         DispatchQueue.main.async {[weak self] in
-            self?.productImage.image = self?.itemViewModel.getGifImage()
+            self?.productImage.image = self?.itemViewModel.getImage()
             self?.indicatorView.stopAnimating()
             
         }
