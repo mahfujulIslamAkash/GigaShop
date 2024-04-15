@@ -15,7 +15,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    lazy var gifView: UIImageView = {
+    lazy var productImage: UIImageView = {
         let view = UIImageView()
         view.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
         view.addSubview(indicatorView)
@@ -69,8 +69,8 @@ class ItemCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         // Initialize your cell as usual
         super.init(frame: frame)
-        contentView.addSubview(gifView)
-        gifView.fillSuperview()
+        contentView.addSubview(productImage)
+        productImage.fillSuperview()
     }
     
     //MARK: Setup Binders
@@ -102,7 +102,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     private func updateUI(){
         DispatchQueue.main.async {[weak self] in
-            self?.gifView.image = self?.itemViewModel.getImage()
+            self?.productImage.image = self?.itemViewModel.getImage()
             self?.indicatorView.stopAnimating()
         }
         

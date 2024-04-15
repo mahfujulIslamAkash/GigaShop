@@ -119,7 +119,7 @@ class HomeViewModel{
     
     private func fetchingData(_ searchedText: String?){
         isLoading.value = true
-        NetworkService.shared.getSearchedGifs(searchedText, completion: {[weak self] success, results  in
+        NetworkService.shared.getSearchedProductss(searchedText, completion: {[weak self] success, results  in
             self?.results = results
             #warning("this is need to be maintain again later")
             self?.sortResult(true, true, true)
@@ -152,11 +152,11 @@ class HomeViewModel{
         return results.filter{$0.price ?? 0 <= priceRange}[indexPath.row]
     }
     
-    private func getOriginalGifPath(_ indexPath: IndexPath) -> String{
+    private func getProductPath(_ indexPath: IndexPath) -> String{
         guard let results = results else{
             return ""
         }
-        guard let path = results.filter({$0.price ?? 0 <= priceRange})[indexPath.row].original else { return "" }
+        guard let path = results.filter({$0.price ?? 0 <= priceRange})[indexPath.row].productPath else { return "" }
         return path
     }
     
@@ -167,7 +167,7 @@ class HomeViewModel{
     
     //MARK: testing purpose for mine
     private func copyToClipboard(_ indexPath: IndexPath) {
-        let path = getOriginalGifPath(indexPath)
+        let path = getProductPath(indexPath)
         UIView.shared.copyToClipboard(path)
     }
     

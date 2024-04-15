@@ -8,33 +8,11 @@ import Foundation
 import UIKit
 import Alamofire
 
-#warning("Here I implemented 2 API providers because I was getting some warning from gify, thats why I added 2nd one for testing purposes")
-
 final class NetworkService{
     static var shared = NetworkService()
     private let basePath: String = "https://api.doozie.shop/v1/items/search"
     private let searchText: String = "shirt"
     
-    
-//    private func getPath(_ searchText: String?) -> String{
-//        if let text = searchText{
-//            if providerType == .gify{
-//                return basePath+text
-//            }else{
-//                return basePath+text+"&key=LIVDSRZULELA"
-//            }
-//            
-//        }
-//        else{
-//            //Default path
-//            if providerType == .gify{
-//                return basePath+self.searchText
-//            }else{
-//                return basePath+self.searchText+"&key=LIVDSRZULELA"
-//            }
-//            
-//        }
-//    }
     private func getHttpBodyfromJSON(_ searchText: String?) -> Data?{
         var jsonDictionary: [String: Any] = [
             "rakuten_query_parameters": [
@@ -80,7 +58,7 @@ final class NetworkService{
         return request
     }
     
-    //MARK: Respose for gify, tenor
+    //MARK: Respose from gigalogy
     private func getResponse(_ searchFor: String?, completion: @escaping(_ success: Bool, _ result: [Product]?)-> Void){
         
         guard let request = getURLRequest(searchFor) else{
@@ -109,7 +87,7 @@ final class NetworkService{
         
     }
     
-    //MARK: Gify Data fetch using JSONSerialization
+    //MARK: Product Data fetch using JSONSerialization
     private func parsingProducts(data: Data?, completion: @escaping(_ success: Bool, [Product]?)-> Void){
         if let data = data{
             do {
@@ -180,7 +158,7 @@ final class NetworkService{
     }
     
     //This func will be called by the VM
-    func getSearchedGifs(_ searchFor: String?, completion: @escaping(_ success: Bool,_ result: [Product]?)-> Void){
+    func getSearchedProductss(_ searchFor: String?, completion: @escaping(_ success: Bool,_ result: [Product]?)-> Void){
         getResponse(searchFor, completion: {success, result  in
             completion(success, result)
         })
@@ -196,7 +174,7 @@ final class NetworkService{
     }
     
     //This function fetch the data from URL_path
-    //Using for fetching gif file data
+    //Using for fetching product image data
     //This func will be called by the VM
     func gettingDataOf(_ dataPath: String, completion: @escaping(Data?)->Void){
         if let url = URL(string: dataPath){
@@ -235,10 +213,4 @@ final class NetworkService{
             task.resume()
         }
      
-}
-
-//MARK: Provider Type
-enum ProviderType{
-    case gify
-    case tenor
 }
