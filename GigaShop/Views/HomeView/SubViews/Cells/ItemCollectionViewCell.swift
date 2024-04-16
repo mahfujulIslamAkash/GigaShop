@@ -98,7 +98,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     // Set up observer for data loaded state
     private func setupLoadedBinder(){
-        productViewModel.isLoaded.binds({[weak self] success in
+        productViewModel.isLoaded.bind({[weak self] success in
             if success{
                 self?.updateUI()
             }
@@ -107,7 +107,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     // Set up observer for loading state
     private func setupIsLoadingBinder(){
-        productViewModel.isLoading.binds({[weak self] isLoading in
+        productViewModel.isLoading.bind({[weak self] isLoading in
             self?.loadingAnimation(isLoading)
         })
     }

@@ -90,7 +90,7 @@ class HomeViewController: UIViewController {
     
     // Set up observer for data loaded state
     private func setupLoadedObserver() {
-        homeViewModel.isLoaded.binds({[weak self] success in
+        homeViewModel.isLoaded.bind({[weak self] success in
             if let _ = success {
                 DispatchQueue.main.async {
                     self?.itemCollectionView.reloadData()
@@ -101,14 +101,14 @@ class HomeViewController: UIViewController {
     
     // Set up observer for loading state
     private func setupIsLoadingObserver() {
-        homeViewModel.isLoading.binds({[weak self] isLoading in
+        homeViewModel.isLoading.bind({[weak self] isLoading in
             self?.loadingAnimation(isLoading)
         })
     }
     
     // Set up observer for error state
     private func setupErrorObserver() {
-        homeViewModel.error.binds({[weak self] error in
+        homeViewModel.error.bind({[weak self] error in
             if let _ = error {
                 self?.loadingAnimation(false)
                 self?.homeViewModel.showingErrorToast()
