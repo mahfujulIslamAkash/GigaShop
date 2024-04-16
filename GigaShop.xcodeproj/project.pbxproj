@@ -30,7 +30,7 @@
 		354D5A912BCA60C10067BDF7 /* CustomFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A902BCA60C10067BDF7 /* CustomFilterView.swift */; };
 		354D5A942BCA896D0067BDF7 /* ProductDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A932BCA896D0067BDF7 /* ProductDetailsViewController.swift */; };
 		354D5A962BCA91A40067BDF7 /* Numeric+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A952BCA91A40067BDF7 /* Numeric+Extension.swift */; };
-		354D5A982BCAE6460067BDF7 /* GradientShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354D5A972BCAE6460067BDF7 /* GradientShadowView.swift */; };
+		3564947E2BCE20E90072F6B1 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3564947D2BCE20E90072F6B1 /* Protocols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,7 +78,7 @@
 		354D5A902BCA60C10067BDF7 /* CustomFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFilterView.swift; sourceTree = "<group>"; };
 		354D5A932BCA896D0067BDF7 /* ProductDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsViewController.swift; sourceTree = "<group>"; };
 		354D5A952BCA91A40067BDF7 /* Numeric+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Numeric+Extension.swift"; sourceTree = "<group>"; };
-		354D5A972BCAE6460067BDF7 /* GradientShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientShadowView.swift; sourceTree = "<group>"; };
+		3564947D2BCE20E90072F6B1 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +206,7 @@
 		354D5A742BCA5C660067BDF7 /* Supports */ = {
 			isa = PBXGroup;
 			children = (
+				3564947C2BCE20D70072F6B1 /* Protocols */,
 				351FF2962BCD9098009C6429 /* Enums */,
 				354D5A802BCA5DF20067BDF7 /* Extensions */,
 				354D5A7E2BCA5DF20067BDF7 /* Observer */,
@@ -227,7 +228,6 @@
 			children = (
 				354D5A7C2BCA5D9E0067BDF7 /* CustomSearchField.swift */,
 				354D5A902BCA60C10067BDF7 /* CustomFilterView.swift */,
-				354D5A972BCAE6460067BDF7 /* GradientShadowView.swift */,
 				354D5A792BCA5D860067BDF7 /* Cells */,
 			);
 			path = SubViews;
@@ -266,6 +266,14 @@
 				354D5A932BCA896D0067BDF7 /* ProductDetailsViewController.swift */,
 			);
 			path = ItemDetailsView;
+			sourceTree = "<group>";
+		};
+		3564947C2BCE20D70072F6B1 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				3564947D2BCE20E90072F6B1 /* Protocols.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -412,10 +420,10 @@
 				354D5A842BCA5DF20067BDF7 /* ObservableObject.swift in Sources */,
 				354D5A912BCA60C10067BDF7 /* CustomFilterView.swift in Sources */,
 				354D5A7B2BCA5D940067BDF7 /* ItemCollectionViewCell.swift in Sources */,
+				3564947E2BCE20E90072F6B1 /* Protocols.swift in Sources */,
 				354D5A872BCA5DF20067BDF7 /* UIImage+Extension.swift in Sources */,
 				351FF2982BCD90AA009C6429 /* SortType.swift in Sources */,
 				354D5A772BCA5D710067BDF7 /* HomeViewController.swift in Sources */,
-				354D5A982BCAE6460067BDF7 /* GradientShadowView.swift in Sources */,
 				354D5A852BCA5DF20067BDF7 /* UIColor+Extension.swift in Sources */,
 				354D5A8D2BCA5E950067BDF7 /* NetworkService.swift in Sources */,
 				354D5A8F2BCA5F310067BDF7 /* Product.swift in Sources */,

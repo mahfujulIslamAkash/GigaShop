@@ -134,12 +134,12 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="descriptionLable" destination="rff-7g-wSJ" id="2Mk-uU-lsh"/>
+                        <outlet property="descriptionLabel" destination="rff-7g-wSJ" id="6jv-oU-RBm"/>
                         <outlet property="indicatorView" destination="Wna-NG-IFq" id="xgm-zX-bds"/>
                         <outlet property="priceLabel" destination="x1L-4O-73X" id="GEs-0K-aZ1"/>
                         <outlet property="productImage" destination="xQv-Xf-JTu" id="5aI-gB-39F"/>
                         <outlet property="reviewLabel" destination="wBx-ND-kVZ" id="wtk-G1-s2T"/>
-                        <outlet property="reviewsLable" destination="hH8-t8-FI5" id="Dne-gl-ErM"/>
+                        <outlet property="reviewsLabel" destination="hH8-t8-FI5" id="CcZ-VX-JEQ"/>
                         <outlet property="titleLabel" destination="yuo-qp-WQ1" id="GVd-LP-XMN"/>
                     </connections>
                 </viewController>
@@ -151,7 +151,7 @@
     <resources>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

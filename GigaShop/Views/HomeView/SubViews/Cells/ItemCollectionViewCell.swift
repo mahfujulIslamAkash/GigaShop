@@ -8,6 +8,9 @@ import UIKit
 
 class ItemCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
+    // Activity indicator to show loading state of the image
     let indicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.hidesWhenStopped = true
@@ -15,6 +18,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    // Image view to display the product image
     lazy var productImage: UIImageView = {
         let view = UIImageView()
         view.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
@@ -25,10 +29,8 @@ class ItemCollectionViewCell: UICollectionViewCell {
         view.layer.masksToBounds = true
         view.clipsToBounds = true
         
-        //
+        // Additional setup for displaying price and review information
         let backImage = GradientShadowView()
-//        backImage.layer.borderWidth = 0.5
-        
         let stack = UIStackView()
         stack.axis = .vertical
         view.addSubview(backImage)
@@ -41,39 +43,48 @@ class ItemCollectionViewCell: UICollectionViewCell {
         stack.addArrangedSubview(reviewTitle)
         stack.addArrangedSubview(reviewCountTitle)
         
-        
-        //
-        
         return view
     }()
+    
+    // Label to display the price of the product
     lazy var priceTitle: UILabel = {
         let title = UILabel()
         title.textColor = .white
         return title
     }()
     
+    // Label to display the review rating of the product
     lazy var reviewTitle: UILabel = {
         let title = UILabel()
         title.textColor = .white
         return title
     }()
+    
+    // Label to display the total number of reviews for the product
     lazy var reviewCountTitle: UILabel = {
         let title = UILabel()
         title.textColor = .white
         return title
     }()
     
-    
+    // ViewModel to handle product-related data and actions
     var productViewModel = ProductViewModel()
     
+    // MARK: - Initializers
+    
     override init(frame: CGRect) {
-        // Initialize your cell as usual
         super.init(frame: frame)
         contentView.addSubview(productImage)
         productImage.fillSuperview()
     }
     
-    //MARK: Setup Binders
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Setup
+    
+    // Set up binders for observing ViewModel properties
     func setupBinders(){
         setupLoadedBinder()
         setupIsLoadingBinder()
@@ -83,31 +94,37 @@ class ItemCollectionViewCell: UICollectionViewCell {
         reviewCountTitle.text = "Reviews: " + productViewModel.getTotalReviews()
     }
     
-    //This binder will trigger after fetching online data
+    // MARK: - Binder Setups
+    
+    // Set up observer for data loaded state
     private func setupLoadedBinder(){
         productViewModel.isLoaded.binds({[weak self] success in
             if success{
                 self?.updateUI()
             }
-            
         })
     }
     
-    //This binder will trigger when loading need to change its state
+    // Set up observer for loading state
     private func setupIsLoadingBinder(){
         productViewModel.isLoading.binds({[weak self] isLoading in
             self?.loadingAnimation(isLoading)
         })
     }
     
+    // MARK: - UI Updates
+    
+    // Update UI when product image is loaded
     private func updateUI(){
         DispatchQueue.main.async {[weak self] in
             self?.productImage.image = self?.productViewModel.getImage()
             self?.indicatorView.stopAnimating()
         }
-        
     }
     
+    // MARK: - Loading Animation
+    
+    // Animate activity indicator based on loading state
     private func loadingAnimation(_ isLoading: Bool){
         if isLoading{
             DispatchQueue.main.async {[weak self] in
@@ -119,9 +136,4 @@ class ItemCollectionViewCell: UICollectionViewCell {
             }
         }
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
-

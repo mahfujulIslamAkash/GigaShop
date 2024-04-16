@@ -5,32 +5,32 @@
 //
 
 import Foundation
-import UIKit
-import Alamofire
 
-final class NetworkService{
+final class NetworkService {
+    
+    // Singleton instance of NetworkService
     static var shared = NetworkService()
+    
+    // Base URL for API requests
     private let basePath: String = "https://api.doozie.shop/v1/items/search"
+    
+    // Default search text
     private let searchText: String = "shirt"
     
-    private func getHttpBodyfromJSON(_ searchText: String?) -> Data?{
+    // MARK: - Private Methods
+    
+    // Convert search text to HTTP body JSON data
+    private func getHttpBodyfromJSON(_ searchText: String?) -> Data? {
         var jsonDictionary: [String: Any] = [
-            "rakuten_query_parameters": [
-                "keyword": "shirt"
-            ],
-            "yahoo_query_parameters": [
-                "query": "shirt"
-            ],
+            "rakuten_query_parameters": ["keyword": "shirt"],
+            "yahoo_query_parameters": ["query": "shirt"],
             "from_scheduler": false
         ]
-        if let searchText = searchText{
+        
+        if let searchText = searchText {
             jsonDictionary = [
-                "rakuten_query_parameters": [
-                    "keyword": "\(searchText)"
-                ],
-                "yahoo_query_parameters": [
-                    "query": "\(searchText)"
-                ],
+                "rakuten_query_parameters": ["keyword": searchText],
+                "yahoo_query_parameters": ["query": searchText],
                 "from_scheduler": false
             ]
         }
@@ -38,12 +38,11 @@ final class NetworkService{
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
             return jsonData
-        }catch{
+        } catch {
             return nil
         }
-        
-        
     }
+    // Construct URL request with HTTP body
     private func getURLRequest(_ searchFor: String?) -> URLRequest?{
         guard let url = URL(string: basePath) else { return nil }
         
@@ -58,7 +57,7 @@ final class NetworkService{
         return request
     }
     
-    //MARK: Respose from gigalogy
+    // Parse response data for Product objects
     private func getResponse(_ searchFor: String?, completion: @escaping(_ success: Bool, _ result: [Product]?)-> Void){
         
         guard let request = getURLRequest(searchFor) else{
@@ -87,7 +86,7 @@ final class NetworkService{
         
     }
     
-    //MARK: Product Data fetch using JSONSerialization
+    // Handle response
     private func parsingProducts(data: Data?, completion: @escaping(_ success: Bool, [Product]?)-> Void){
         if let data = data{
             do {
@@ -157,25 +156,16 @@ final class NetworkService{
         }
     }
     
-    //This func will be called by the VM
+    // MARK: - Public Methods
+        
+    // Fetch searched products
     func getSearchedProductss(_ searchFor: String?, completion: @escaping(_ success: Bool,_ result: [Product]?)-> Void){
         getResponse(searchFor, completion: {success, result  in
             completion(success, result)
         })
     }
     
-    
-    func modified(_ main: Product)-> Product{
-        var item = main
-        item.price = ((Double.random(in: 10..<1000)*100).rounded())/100
-        item.review = ((Double.random(in: 0..<5)*10).rounded())/10
-        item.reviewCount = Int.random(in: 0..<1000)
-        return item
-    }
-    
-    //This function fetch the data from URL_path
-    //Using for fetching product image data
-    //This func will be called by the VM
+    // Fetch data from URL path
     func gettingDataOf(_ dataPath: String, completion: @escaping(Data?)->Void){
         if let url = URL(string: dataPath){
             var request = URLRequest(url: url)
@@ -197,7 +187,7 @@ final class NetworkService{
         }
     }
     
-    //This func is helping to detect internet connection
+    // Check internet connectivity
     func checkConnectivity(completion: @escaping (Bool) -> Void) {
             guard let url = URL(string: "https://www.apple.com") else {
                 completion(false) // Invalid URL

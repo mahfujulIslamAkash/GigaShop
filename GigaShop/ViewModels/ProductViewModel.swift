@@ -7,103 +7,112 @@
 import Foundation
 import UIKit
 
-final class ProductViewModel{
-    //Observers
+final class ProductViewModel {
+    // Observers for tracking loading state
     var isLoaded: ObservableObject<Bool> = ObservableObject(false)
     var isLoading: ObservableObject<Bool> = ObservableObject(true)
     
+    // Image and product instance
     private var image: UIImage?
     private let product: Product?
     
+    // Initializer with optional product parameter
     init(product: Product? = nil) {
         self.product = product
     }
     
-    func getPrice() -> String{
-        if let price = product?.price, let currency = product?.currency{
+    // MARK: - Data Access Methods
+    
+    // Get formatted price string
+    func getPrice() -> String {
+        if let price = product?.price, let currency = product?.currency {
             return price.asString() + currency.uppercased()
-        }else{
+        } else {
             return "Free"
         }
-        
     }
-    func getReview() -> String{
-        if let review = product?.review{
+    
+    // Get formatted review rating string
+    func getReview() -> String {
+        if let review = product?.review {
             return review.asString()
-        }else{
+        } else {
             return "0.0"
         }
     }
     
-    func getTotalReviews() -> String{
-        if let reviews = product?.reviewCount{
+    // Get formatted total reviews string
+    func getTotalReviews() -> String {
+        if let reviews = product?.reviewCount {
             return reviews.asString()
-        }else{
+        } else {
             return "0.0"
         }
     }
     
-    func getTitle() -> String{
-        if let title = product?.title{
+    // Get product title or default if not available
+    func getTitle() -> String {
+        if let title = product?.title {
             return title
-        }else{
-            return "N/A"
-        }
-    }
-    func getDescription() -> String{
-        if let description = product?.description{
-            return description
-        }else{
+        } else {
             return "N/A"
         }
     }
     
-    private func gettingDataFromPath(completion: @escaping(Data?, Bool)->Void){
-        if let path = product?.productImagePath{
-            NetworkService.shared.gettingDataOf(path, completion: {data in
-                if let data = data{
-                    //success here
+    // Get product description or default if not available
+    func getDescription() -> String {
+        if let description = product?.description {
+            return description
+        } else {
+            return "N/A"
+        }
+    }
+    
+    // MARK: - Image Fetching
+    
+    // Fetch image data from the network
+    private func getDataFromPath(completion: @escaping (Data?, Bool) -> Void) {
+        if let path = product?.productImagePath {
+            NetworkService.shared.gettingDataOf(path) { data in
+                if let data = data {
+                    // Success
                     completion(data, true)
-                }else{
+                } else {
                     completion(nil, false)
                 }
-            })
-        }else{
+            }
+        } else {
             completion(nil, false)
         }
-        
     }
     
-    private func gettingImageFromPath(completion: @escaping(Bool)->Void){
-        gettingDataFromPath(completion: {[weak self] data, success in
-            if let data = data{
-                if let image = UIImage.imageFromData(data){
+    // Fetch image from the network and handle loading state
+    private func getImageFromPath(completion: @escaping (Bool) -> Void) {
+        getDataFromPath { [weak self] data, success in
+            if let data = data {
+                if let image = UIImage.imageFromData(data) {
                     self?.isLoaded.value = true
                     self?.image = image
                     completion(true)
-                }else{
+                } else {
                     completion(false)
                 }
-            }else{
+            } else {
                 completion(false)
             }
-        })
-    }
-    
-    func fetchImage(){
-        isLoading.value = true
-        gettingImageFromPath(completion: {[weak self] _ in
-            self?.isLoading.value = false
-        })
-    }
-    
-    func getImage() -> UIImage?{
-        if let image = self.image{
-            return image
-        }else{
-            return nil
         }
     }
     
+    // Fetch image and update loading state
+    func fetchImage() {
+        isLoading.value = true
+        getImageFromPath { [weak self] _ in
+            self?.isLoading.value = false
+        }
+    }
     
+    // Get the fetched image
+    func getImage() -> UIImage? {
+        return image
+    }
 }

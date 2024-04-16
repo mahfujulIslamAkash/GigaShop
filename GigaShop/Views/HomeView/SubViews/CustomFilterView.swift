@@ -6,15 +6,13 @@
 import Foundation
 import UIKit
 
-protocol PriceDelegate{
-    func priceRangeFilter(price: Double)
-    func sortedBy(sortedBy: SortType)
-}
-
-class CustomFilterView: UIView{
+class CustomFilterView: UIView {
     
-    var delegate: PriceDelegate?
+    // MARK: - Properties
     
+    var delegate: FilterDelegate?
+    
+    // Stack view to organize UI components vertically for sorting and price range filtering
     lazy var filterStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -30,6 +28,7 @@ class CustomFilterView: UIView{
         return stack
     }()
     
+    // Stack view to organize sorting options horizontally
     lazy var sortStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -45,6 +44,7 @@ class CustomFilterView: UIView{
         return stack
     }()
     
+    // Button to select sorting criteria
     lazy var sortedByButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sorted By", for: .normal)
@@ -54,6 +54,7 @@ class CustomFilterView: UIView{
         button.layer.cornerRadius = 8
         button.showsMenuAsPrimaryAction = true
         
+        // Creating sorting options menu
         var elements: [UIMenuElement] = []
         for sortedBy in self.sortingItemList {
             let action = UIAction(title: sortedBy.description, handler: { [weak self] value in
@@ -61,13 +62,12 @@ class CustomFilterView: UIView{
                 self?.delegate?.sortedBy(sortedBy: sortedBy)
             })
             elements.append(action)
-            
-            
         }
         button.menu = UIMenu(title: "Sorted by", children: elements)
         return button
     }()
     
+    // Label to display the currently selected sorting criteria
     lazy var sortedByLabel: UILabel = {
         let label = UILabel()
         label.text = "Low Price"
@@ -79,6 +79,7 @@ class CustomFilterView: UIView{
         return label
     }()
     
+    // Stack view to organize price range slider and its label horizontally
     lazy var sliderStatckView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -98,6 +99,7 @@ class CustomFilterView: UIView{
         return stack
     }()
     
+    // Slider to select price range
     lazy var slider: UISlider = {
         let slider = UISlider()
         slider.maximumValue = 100000
@@ -109,6 +111,7 @@ class CustomFilterView: UIView{
         return slider
     }()
     
+    // Label to display the value of the price range selected by the slider
     lazy var sliderValueLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -116,6 +119,7 @@ class CustomFilterView: UIView{
         return label
     }()
     
+    // List of sorting options
     private var sortingItemList: [SortType] = [
         .lowPrice,
         .highPrice,
@@ -125,38 +129,38 @@ class CustomFilterView: UIView{
         .highReviews,
     ]
     
-    
     var motherSize: CGSize = .zero
+    
+    // MARK: - Initializers
     
     init(motherSize: CGSize){
         super.init(frame: .zero)
         self.motherSize = motherSize
         setupUI(motherSize: motherSize)
-        
     }
-    
-    func setupUI(motherSize: CGSize){
-        
-        addSubview(filterStack)
-        filterStack.anchorView(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 8)
-        filterStack.heightAnchor.constraint(equalToConstant: motherSize.height).isActive = true
-        
-        
-        
-    }
-    
-    @objc func sliderEndWith(_ sender: UISlider){
-        delegate?.priceRangeFilter(price: Double(sender.value))
-        
-    }
-    
-    @objc func sliderValueChanged(_ sender: UISlider) {
-        sliderValueLabel.text = Int(sender.value).asString()
-    }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - UI Setup
+    
+    // Set up UI components and constraints
+    func setupUI(motherSize: CGSize){
+        addSubview(filterStack)
+        filterStack.anchorView(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingLeft: 8, paddingRight: 8)
+        filterStack.heightAnchor.constraint(equalToConstant: motherSize.height).isActive = true
+    }
+    
+    // MARK: - Slider Actions
+    
+    // Action when slider value changes
+    @objc func sliderValueChanged(_ sender: UISlider) {
+        sliderValueLabel.text = Int(sender.value).asString()
+    }
+    
+    // Action when slider interaction ends
+    @objc func sliderEndWith(_ sender: UISlider){
+        delegate?.priceRangeFilter(price: Double(sender.value))
+    }
 }
-

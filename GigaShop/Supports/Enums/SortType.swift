@@ -7,7 +7,8 @@
 
 import Foundation
 
-enum SortType{
+/// Enum defining different sorting criteria for products
+enum SortType {
     case lowPrice
     case highPrice
     case lowRating
@@ -15,8 +16,9 @@ enum SortType{
     case lowReviews
     case highReviews
     
-    var description: String{
-        switch self{
+    /// A textual description of the sort type.
+    var description: String {
+        switch self {
         case .lowPrice:
             return "Low Price"
         case .highPrice:
@@ -27,7 +29,7 @@ enum SortType{
             return "High Rating"
         case .lowReviews:
             return "Low Reviews"
-        default:
+        case .highReviews:
             return "High Reviews"
         }
     }
