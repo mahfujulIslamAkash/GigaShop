@@ -26,7 +26,7 @@ class HomeViewController: UIViewController {
     }()
     
     // Collection view to display search results
-    lazy var itemCollectionView: UICollectionView = {
+    lazy var productCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -56,7 +56,7 @@ class HomeViewController: UIViewController {
         stack.spacing = 15
         stack.addArrangedSubview(customSearchField)
         stack.addArrangedSubview(customFilterView)
-        stack.addArrangedSubview(itemCollectionView)
+        stack.addArrangedSubview(productCollectionView)
         stack.layer.borderWidth = 0.5
         stack.addSubview(indicatorView)
         indicatorView.centerX(inView: stack)
@@ -93,7 +93,7 @@ class HomeViewController: UIViewController {
         homeViewModel.isLoaded.bind({[weak self] success in
             if let _ = success {
                 DispatchQueue.main.async {
-                    self?.itemCollectionView.reloadData()
+                    self?.productCollectionView.reloadData()
                 }
             }
         })
@@ -122,12 +122,12 @@ class HomeViewController: UIViewController {
     private func loadingAnimation(_ isLoading: Bool) {
         if isLoading {
             DispatchQueue.main.async {[weak self] in
-                self?.itemCollectionView.layer.opacity = 0
+                self?.productCollectionView.layer.opacity = 0
                 self?.indicatorView.startAnimating()
             }
         } else {
             DispatchQueue.main.async {[weak self] in
-                self?.itemCollectionView.layer.opacity = 1
+                self?.productCollectionView.layer.opacity = 1
                 self?.indicatorView.stopAnimating()
             }
         }
