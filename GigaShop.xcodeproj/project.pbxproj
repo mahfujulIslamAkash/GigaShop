@@ -33,6 +33,7 @@
 		3564947E2BCE20E90072F6B1 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3564947D2BCE20E90072F6B1 /* Protocols.swift */; };
 		356494832BCE3DA30072F6B1 /* ss-home.png in Resources */ = {isa = PBXBuildFile; fileRef = 356494812BCE3DA30072F6B1 /* ss-home.png */; };
 		356494872BCE421E0072F6B1 /* ss-sort.png in Resources */ = {isa = PBXBuildFile; fileRef = 356494862BCE421E0072F6B1 /* ss-sort.png */; };
+		3564948A2BCECEAE0072F6B1 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356494892BCECEAE0072F6B1 /* AppData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		3564947D2BCE20E90072F6B1 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		356494812BCE3DA30072F6B1 /* ss-home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ss-home.png"; sourceTree = "<group>"; };
 		356494862BCE421E0072F6B1 /* ss-sort.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ss-sort.png"; sourceTree = "<group>"; };
+		356494892BCECEAE0072F6B1 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +212,7 @@
 		354D5A742BCA5C660067BDF7 /* Supports */ = {
 			isa = PBXGroup;
 			children = (
+				356494882BCECE230072F6B1 /* Storage */,
 				3564947C2BCE20D70072F6B1 /* Protocols */,
 				351FF2962BCD9098009C6429 /* Enums */,
 				354D5A802BCA5DF20067BDF7 /* Extensions */,
@@ -288,6 +291,14 @@
 				356494862BCE421E0072F6B1 /* ss-sort.png */,
 			);
 			path = ScreenShots;
+			sourceTree = "<group>";
+		};
+		356494882BCECE230072F6B1 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				356494892BCECEAE0072F6B1 /* AppData.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -432,6 +443,7 @@
 				354D5A412BCA59D50067BDF7 /* AppDelegate.swift in Sources */,
 				354D5A432BCA59D50067BDF7 /* SceneDelegate.swift in Sources */,
 				354D5A862BCA5DF20067BDF7 /* UIView+Extension.swift in Sources */,
+				3564948A2BCECEAE0072F6B1 /* AppData.swift in Sources */,
 				354D5A7D2BCA5D9E0067BDF7 /* CustomSearchField.swift in Sources */,
 				354D5A842BCA5DF20067BDF7 /* ObservableObject.swift in Sources */,
 				354D5A912BCA60C10067BDF7 /* CustomFilterView.swift in Sources */,
