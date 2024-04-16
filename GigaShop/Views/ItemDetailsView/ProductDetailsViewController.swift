@@ -93,4 +93,10 @@ class ProductDetailsViewController: UIViewController {
     @IBAction func backButton(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
+    @IBAction func openBrowser(_ sender: UIButton) {
+        productViewModel.tryingToOpenBrowser()
+    }
+    @IBAction func copyLink(_ sender: UIButton) {
+        productViewModel.copyToClipboard()
+    }
 }

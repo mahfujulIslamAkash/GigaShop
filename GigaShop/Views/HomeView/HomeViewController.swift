@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        view.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .black

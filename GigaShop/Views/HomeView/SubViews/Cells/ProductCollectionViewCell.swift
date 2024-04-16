@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ItemCollectionViewCell: UICollectionViewCell {
+class ProductCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     

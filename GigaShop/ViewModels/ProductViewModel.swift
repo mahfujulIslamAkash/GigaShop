@@ -68,6 +68,15 @@ final class ProductViewModel {
         }
     }
     
+    // Get product's link/url
+    func getProductLink() -> String? {
+        if let path = product?.productPath {
+            return path
+        } else {
+            return nil
+        }
+    }
+    
     // MARK: - Image Fetching
     
     // Fetch image data from the network
@@ -118,5 +127,37 @@ final class ProductViewModel {
     // Get the placeholder image
     func getPlaceholder() -> UIImage {
         return UIImage()
+    }
+    
+    //MARK: Copy link
+    func copyToClipboard() {
+        if let path = getProductLink(){
+            UIView.shared.copyToClipboard(path)
+        }else{
+            showingErrorToast("Invalid link")
+        }
+        
+    }
+    // Function to display an error toast message
+    func showingErrorToast(_ message: String = "Error") {
+        DispatchQueue.main.async {
+            UIView.shared.showingToast(message)
+        }
+    }
+    
+    func tryingToOpenBrowser(){
+        if let link = getProductLink(){
+            if let url = URL(string: link) {
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    print("Unable to open URL: \(url)")
+                }
+            } else {
+                print("Invalid URL: \(link)")
+            }
+        }else{
+            showingErrorToast("Unable to open")
+        }
     }
 }

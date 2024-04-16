@@ -53,7 +53,7 @@ class HomeViewModel{
     
     // Function to dequeue and configure collection view cells
     func getCell(_ collectionView: UICollectionView, _ indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ItemCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ProductCollectionViewCell
         cell.productViewModel = viewModelOfItem(indexPath)
         cell.setupBinders()
         return cell
