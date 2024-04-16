@@ -115,4 +115,8 @@ final class ProductViewModel {
     func getImage() -> UIImage? {
         return image
     }
+    // Get the placeholder image
+    func getPlaceholder() -> UIImage {
+        return UIImage()
+    }
 }
