@@ -128,6 +128,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     private func loadingAnimation(_ isLoading: Bool){
         if isLoading{
             DispatchQueue.main.async {[weak self] in
+                self?.productImage.image = self?.productViewModel.getPlaceholder()
                 self?.indicatorView.startAnimating()
             }
         }else{
