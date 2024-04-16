@@ -1,6 +1,6 @@
-# Product Search App
+# GigaShop - Product Search Engine
 
-This Product Search App allows users to search for products using a third-party API. Users can filter and sort their search results and view detailed product information.
+This Product Search App allows users to search for products. Users can filter and sort their search results and view detailed product information.
 
 ## Features
 
