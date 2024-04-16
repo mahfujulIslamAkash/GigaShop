@@ -25,6 +25,10 @@ To install the app, follow these steps:
 4. Use the sorting options to arrange your search results by price, rating, or review count.
 5. Scroll through the collection view to view the fetched products.
 6. Tap on a product to view detailed information about it.
+<div style="display: flex; justify-content: center;">
+    <img src="GigaShop/Supports/ScreenShots/ss-home.png" alt="Landing page" width="250" >
+    <img src="GigaShop/Supports/ScreenShots/ss-sort.png" alt="Filter search by sort" width="250" >
+</div>
 
 ## Requirements
 
