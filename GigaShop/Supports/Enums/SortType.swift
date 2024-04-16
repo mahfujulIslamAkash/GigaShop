@@ -2,7 +2,6 @@
 //  SortType.swift
 //  GigaShop
 //
-//  Created by Appnap Mahfuj on 15/4/24.
 //
 
 import Foundation

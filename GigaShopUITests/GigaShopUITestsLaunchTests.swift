@@ -2,7 +2,6 @@
 //  GigaShopUITestsLaunchTests.swift
 //  GigaShopUITests
 //
-//  Created by Appnap Mahfuj on 13/4/24.
 //
 
 import XCTest
